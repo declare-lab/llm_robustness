@@ -10,12 +10,19 @@ from tqdm import tqdm
 from execution import easy_check
 from helper import check_nan, split_test_cases
 from modeling import select_model
-from ontology import Dataset, Ontoloty, PerturbTemplate, PromptTemplate
+from ontology import (
+    Dataset,
+    Ontology,
+    PerturbTemplateGSM8K,
+    PerturbTemplateHumanEval,
+    PromptTemplate,
+)
 
 
-ontology = Ontoloty()
+ontology = Ontology()
 prompt_template = PromptTemplate()
-perturb_template = PerturbTemplate()
+perturb_gsm8k = PerturbTemplateGSM8K()
+perturb_human_eval = PerturbTemplateHumanEval()
 dataset = Dataset()
 
 
@@ -23,23 +30,42 @@ def gen_dataset_gsm8k():
     print(locals())
     model = select_model(model_name="gpt4", temperature=0.8).generate
     item_list = dataset.gsm8k_original()
-    dimensions = ontology.gsm8k().keys()
-    transform = perturb_template.gsm8k
+    categories = ontology.gsm8k().keys()
     perturbed_items = []
 
+    def get_requirement(string):
+        for l in string.split("\n"):
+            if l.lower().startswith("#rewrite requirement#"):
+                return l
+        return None
+
     for item in tqdm(item_list):
-        for dimension in tqdm(dimensions, leave=False):
-            perturbed_q = transform(deepcopy(item), dimension, model)
+        for category in tqdm(categories, leave=False):
+            dimension = ontology.gsm8k()[category][1]
+            perturbed_q, answer, prompt = perturb_gsm8k(
+                dimension, deepcopy(item), category, model
+            )
+            requirement = get_requirement(prompt)
+            if requirement:
+                refined_perturbed_q = prompt_template.gsm8k_filter_refine(
+                    item, perturbed_q, requirement, model
+                )
             item_dict = dict(
-                dimension=dimension,
+                category=category,
                 original_question=f"{item.context} {item.question}\n",
                 original_answer=f"Answer:\n{item.chain_of_thought}\n{item.answer}",
                 perturbed_question=perturbed_q,
+                refined_perturbed_q=refined_perturbed_q,
+                prompt=prompt,
             )
             perturbed_items.append(item_dict)
+            # print(category)
+            # print(perturbed_q)
+            # print(refined_perturbed_q)
+            # print()
 
     df = pd.DataFrame(perturbed_items)
-    df.to_csv("gsm8k.csv", index=False)
+    df.to_csv("gsm8k_problem.csv", index=False)
     return df
 
 
@@ -48,12 +74,11 @@ def gen_dataset_human_eval():
     model = select_model(model_name="gpt4", temperature=0.8).generate
     item_list = dataset.human_eval_original()
     dimensions = ontology.human_eval().keys()
-    transform = perturb_template.human_eval
     perturbed_items = []
 
     for item in tqdm(item_list):
         for dimension in tqdm(dimensions, leave=False):
-            perturbed_q = transform(deepcopy(item), dimension, model)
+            perturbed_q = perturb_human_eval(deepcopy(item), dimension, model)
             item_dict = dict(
                 dimension=dimension,
                 original_question=f"{item.function_header}{item.docstring}{item.examples}\n",

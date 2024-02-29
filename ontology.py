@@ -47,7 +47,7 @@ class Human_eval_Item(BaseModel):
 class Ontology(BaseModel):
     def gsm8k(self):
         return {
-            "Original": ["Original", "Original", "Original", "Original"],
+            # "Original": ["Original", "Original", "Original", "Original"],
             "Remove Constraint": [
                 "Remove Constraint",
                 "Question Simplification",
@@ -320,7 +320,7 @@ class Ontology(BaseModel):
 
     def human_eval(self):
         return {
-            "Original": ["Original", "Original", "Original", "Original"],
+            # "Original": ["Original", "Original", "Original", "Original"],
             "Remove Constraint": [
                 "Remove Constraint",
                 "Question Simplification",
@@ -1136,251 +1136,342 @@ Answer: [final answer]
         )
         return prompt
 
+    def gsm8k_filter_refine(self, item, perturbed_q, requirement, model):
+        prompt = (
+            "Instruction: Given an #original question# and a #perturbed question# transformed from #requirement#, do the following things:\n"
+            "1. if #perturbed question# only contain the question, fulfill the available information from #original question#\n"
+            "2. Check if the #perturbed question# is human understandable. If not, make it clearer and more natural\n"
+            "3. Check if the #perturbed question# fulfills the #requirement# based on the #original requirement#. If not, refine it to follow the #requirement#.\n"
+            "4. Finally you should ouput the question only in #perturbed question# after refinement\n"
+            f"#original question#: {item.context} {item.question}\n"
+            f"#perturbed question#: {perturbed_q}\n"
+            f"#requirement#: {requirement}\n"
+        )
 
-class PerturbTemplate(BaseModel):
-    def gsm8k(self, item, dimension, model):
-        if dimension == "Restrict Question":
-            prompt = "Instruction: Rewrite below original mathematical question based on the #rewrite requirement#.\n"
-            prompt += "Your output should be: [#Rewritten Question#]\n"
-            prompt += "#Rewrite Requirement#:1. Add a new info to context or a constraint on the original question. 2. the answer to the rewritten question should be harder than the original answer.\n"
-            prompt += f"#Original Question#:{item.context}{item.question}\n"
-            prompt += "#Rewritten Question#:\n"
-            item.context = ""
-            item.question = model(prompt)
-            item.answer = ""
+        refined_perturbed_q = model(prompt)
 
-        elif dimension == "Further Question":
-            prompt = "Instruction: Rewrite below original mathematical question based on the #rewrite requirement#.\n"
-            prompt += "Your output should be: [#Further Question#]\n"
-            prompt += "#Rewrite Requirement#:1. No change to the original context. 2. keep the original question 3. add a question that requires further calculation by utilizing the answer of original question, the added question should be harder and solvable\n"
-            prompt += f"#Original Context#:{item.context}\n"
-            prompt += f"#Original Question#:{item.question}\n"
-            prompt += "#Further Question#:\n"
-            item.question = item.question + " " + model(prompt)
-            item.answer = ""
+        return refined_perturbed_q
 
-        elif dimension == "Parallel Question":
-            prompt = "Instruction: Rewrite below original mathematical question based on the #rewrite requirement#.\n"
-            prompt = "Your output should only be: [#Parallel Question#]\n"
-            prompt += "#Rewrite Requirement#:1. No change to the original context. 2. keep the original question 3. add an additional question that ask for values independent from the answer of original question from the same context. The added question should be harder and solvable\n"
-            prompt += f"#Original Context#:{item.context}\n"
-            prompt += f"#Original Question#:{item.question}\n"
-            prompt += "#Parallel Question#:\n"
-            item.question = item.question + " " + model(prompt)
-            item.answer = ""
 
-        elif dimension == "Remove Constraint":
-            to_change = "Context"
-            prompt = f"""Instruction: Rewrite below original mathematical {to_change} based on the #rewrite requirement#.\nYour output should only be: [#Rewritten {to_change}#]\n"""
-            prompt += f"#Original Context#:{item.context}\n"
-            prompt += f"#Original Question#:{item.question}\n"
-            prompt += "#Rewrite Requirement#:1. Remove some constraint or information from the original context. 2. make sure the rewritten question can still be solved, but answer is simpler. \n"
-            prompt += f"#Rewritten {to_change}#:\n"
-            item.context = model(prompt)
-            item.answer = ""
+class PerturbTemplateGSM8K(BaseModel):
+    cot = "You should analyze the #rewrite requirement# first before create the question, as the requirement is complicated. You should create the question in a step by step manner, instead of directly output the perturbed question\n"
+    instruct = "Instruction: Create a new question following the #rewrite requirement# based on original question.\n"
 
-        elif dimension == "Median Inquiry":
-            to_change = "Question"
-            prompt = f"""Instruction: Rewrite below original mathematical {to_change} based on the #rewrite requirement#.\n Your output should be: [#Rewritten {to_change}#]\n"""
-            prompt += f"#Original Context#:{item.context}\n"
-            prompt += f"#Original Question#:{item.question}\n"
-            prompt += (
+    def gsm8k_question_simplification(self, item, category, model):
+        answer, prompt = None, ""
+        if category == "Remove Constraint":
+            prompt = (
+                self.instruct
+                + "#Rewrite Requirement#:1. Remove some constraint or information from the original context. 2. make sure the rewritten question can still be solved, but answer is simpler. \n"
+                f"#Original Question Context#:{item.context}\n"
+                f"#Original Question#:{item.question}\n" + self.cot
+            )
+            cf = model(prompt)
+
+        elif category == "Median Inquiry":
+            prompt = (
+                self.instruct
+                + "#Rewrite Requirement#:1. No change to the original context. 2. Change the question to ask one of any intermediate results from the step by step answer to the original question\n"
+                f"#Original Question Context#:{item.context}\n"
+                f"#Original Question#:{item.question}\n"
                 f"#Step by Step Answer to Original Question#: {item.chain_of_thought}\n"
+                + self.cot
             )
-            prompt += "#Rewrite Requirement#:1. No change to the original context. 2. Change the question to ask one of any intermediate results from the step by step answer to the original question\n"
-            prompt += f"#Rewritten {to_change}#:\n"
-            item.question = model(prompt)
-            item.answer = ""
+            cf = model(prompt)
 
-        elif dimension == "Change Query":
-            to_change = "Question"
-            prompt = f"""Instruction: Rewrite below original mathematical {to_change} based on the #rewrite requirement#.\n Your output should be: [#Rewritten {to_change}#]\n"""
-            prompt += f"#Original Context#:{item.context}\n"
-            prompt += f"#Original Question#:{item.question}\n"
-            prompt += "#Rewrite Requirement#:1. do not change the context of original question 2. Change the question to ask for another value that is different from the value asked in original question\n"
-            prompt += f"#Rewritten {to_change}#:\n"
-            item.question = model(prompt)
-            item.answer = ""
-
-        elif dimension == "Change Setting":
-            prompt = """Instruction: Rewrite below original mathematical question based on the #rewrite requirement#.\n"""
-            prompt += """#rewrite requirement#: Rephrase the original question by changing the application scenario or situation to a completely different one but keep the math core structure. Then change all the person's names and values\n Your output should be: [#Rewritten Question#]\n"""
-            prompt += f"#Original Question#:{item.context} Query: {item.question}\n"
-            prompt += "[#Rewritten Question#]\n"
-            item.context = ""
-            item.question = model(prompt)
-            item.answer = ""
-
-        elif dimension == "Change Calculation":
-            prompt = """Instruction: Rewrite below original mathematical question based on the #rewrite requirement#.\n"""
-            prompt += "#Rewritten requirement#: Change one information in original context, so that it changes the math calculation operation(+-*/) when answering the question based on the context. Make sure the change fits into the context\n"
-            prompt += "Your output should only be: [#Rewritten Context#]\n"
-            prompt += f"#Original Context#:{item.context}\n"
-            prompt += f"#Original Question#:{item.question}\n"
-            prompt += "#Rewritten Context#:\n"
-            item.context = model(prompt)
-            item.answer = ""
-
-        elif dimension == "Change Subject":
-            prompt = """Instruction: Rewrite below original mathematical question based on the #rewrite requirement#.\n"""
-            prompt += "#Rewritten requirement#: Exchange the Peoples' names among the original context. So one person's name in the original context is change to another person's name. If there is only one person's name in the original context, swap the values\n"
-            prompt += "Your output should be: [#Rewritten Context#]\n"
-            prompt += f"#Original Context#:{item.context}\n"
-            prompt += "#Rewritten Context#:\n"
-            output = model(prompt)
-            item.context = output
-            item.answer = ""
-
-        elif dimension == "Info Recombination":
-            prompt = """Instruction: Rewrite below original mathematical question based on the #rewrite requirement#.\n"""
-            prompt += "#Rewritten Requirement#: Adapt and merge the mathematical principles from two questions into one coerce question. You do not need to include all the math principles from both questions in the merged question. The final question should ask for only one value. Make sure the Rewritten Question looks natural.\n"
-            prompt += "Your output should be: [#Rewritten Question#]\n"
-            prompt += f"#Original Question#:{item.context} {item.question}\n"
-            prompt += "#Another Question#: James decides to run 3 sprints 3 times a week.  He runs 60 meters each sprint.  How many total meters does he run a week?"
-            prompt += "#Rewritten Question#:\n"
-            item.context = ""
-            item.question = model(prompt)
-            item.answer = ""
-
-        elif dimension == "Variable Response":
-            prompt = """Instruction: Rewrite below original mathematical question based on the #rewrite requirement#.\n"""
-            prompt += "#Rewritten Requirement#: randomly replace only one value inside original context to variable X\n"
-            prompt += "Your output should be: [#Rewritten Context#]\n"
-            prompt += f"#Original Context#:{item.context}\n"
-            prompt += "#Rewritten Context#:\n"
-            item.context = model(prompt)
-            item.question = (
-                item.question
-                + "(the answer to the question may have variable X included)"
+        elif category == "Detail Elaboration":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: Identify the hidden assumptions to answer original question, and rewrite the original context by specifying the hidden assumptions inside the original context.\n"
+                f"#Original Context#:{item.context}\n"
+                f"#Original Question#:{item.question}\n" + self.cot
             )
-            item.answer = ""
+            cf = model(prompt)
 
-        elif dimension == "Variable Relationship":
-            prompt = """Instruction: Rewrite below original mathematical question based on the #rewrite requirement#.\n"""
-            prompt += "#rewritten requirement#: Find only two values that have a relationship with each other in the original context, and replace the these two values inside the original context to variables X and Y."
-            prompt += "Your output should be: [#Rewritten Context#]\n"
-            prompt += f"#Original Context#:{item.context}\n"
-            prompt += "#Rewritten Context#:\n"
-            item.context = model(prompt)
-            item.question = (
-                item.question
-                + f" If the answer to the question is {item.answer}. What is the equation connects the relationship between X and Y?"
+        elif category == "Solution Plan":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: 1. You should suggest solution plan to the question by using the solution below, but remove the calculations from the plan 2. And ask the model to follow the solution plan to answer the question\n"
+                f"#Original Question#:{item.context} {item.question}\n"
+                f"#Solution#:{item.chain_of_thought}\n" + self.cot
             )
-            item.answer = ""
+            cf = model(prompt)
 
-        elif dimension == "Variable Scaling":
-            prompt = """Instruction: Pick at least 2 values in the context, and output their names separated by comma\n"""
-            prompt += f"#Context#:{item.context}\n"
-            prompt += "#Variable Names#:\n"
-            output = model(prompt)
-            item.question = (
-                f"If the following values [{output}] is scaled up by variable x. "
+        return cf, answer, prompt
+
+    def gsm8k_reasoning_adjustment(self, item, category, model):
+        answer, prompt = None, ""
+
+        if category == "Restrict Question":
+            prompt = (
+                self.instruct
+                + "#Rewrite Requirement#:1. Add a new info to context or a constraint on the original question. 2. the answer to the rewritten question should be harder than the original answer.\n"
+                f"#Original Question#:{item.context}\n{item.question}\n" + self.cot
+            )
+            cf = model(prompt)
+
+        elif category == "Further Question":
+            prompt = (
+                self.instruct
+                + "#Rewrite Requirement#:1. No change to the original context. 2. keep the original question 3. add a question that requires further calculation by utilizing the answer of original question, the added question should be harder and solvable\n"
+                f"#Original Question Context#:{item.context}\n"
+                f"#Original Question#:{item.question}\n" + self.cot
+            )
+            cf = model(prompt)
+
+        elif category == "Parallel Question":
+            prompt = (
+                self.instruct
+                + "#Rewrite Requirement#:1. No change to the original context. 2. keep the original question 3. add an additional question that ask for values independent from the answer of original question from the same context. The added question should solvable\n"
+                f"#Original Question Context#:{item.context}\n"
+                f"#Original Question#:{item.question}\n" + self.cot
+            )
+            cf = model(prompt)
+
+        elif category == "Change Query":
+            prompt = (
+                self.instruct
+                + "#Rewrite Requirement#: 1. do not change the context of original question 2. add a question that requires further calculation by utilizing the answer of the original question as a intermediate step. 3. The added question should be harder to solve than the original question 4. the added question should be solvable 5.The original question should be removed\n"
+                f"#Original Context#:{item.context}\n"
+                f"#Original Question#:{item.question}\n" + self.cot
+            )
+            cf = model(prompt)
+
+        elif category == "Info Recombination":
+            prompt = (
+                self.instruct
+                + "#Rewrite Requirement#: 1. Merge the mathematical structure from two questions into one question. 2. The merged question must be natural. 3. You do not need to include all the information from both questions in the merged question. 4. The final question should ask for only one value.\n"
+                f"#Question 1#:{item.context} {item.question}\n"
+                "#Question 2#: James decides to run 3 sprints 3 times a week.  He runs 60 meters each sprint.  How many total meters does he run a week?"
+                + self.cot
+            )
+            cf = model(prompt)
+
+        elif category == "Theoretical Challenge":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: 1. expand the Question below to ask for a value that will converge after infinite number of calculations 2. The answer must include infinite number of calculations. 3. the result should be human understandable and solvable\n"
+                f"#Question#:{item.context} {item.question}\n" + self.cot
+            )
+            cf = model(prompt)
+
+        elif category == "Value Probability":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: 1. Change only one deterministic value in the original context to one with probability. For example, The value have a 30% chance to be 10, and 70% chance to be 10 3. Add 'give the expected estimation' to the question 4. Make sure The rewritten context should be understandable by human 5. Make sure the question is solvable\n"
+                f"#Original Question#:{item.context} {item.question}\n" + self.cot
+            )
+            cf = model(prompt)
+
+        elif category == "Code Implementation":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: 1. ask the language model to develop a python code to solve the question\n"
+                f"#Original Question#:{item.context} {item.question}\n" + self.cot
+            )
+
+            cf = model(prompt)
+
+        return cf, answer, prompt
+
+    def gsm8k_computation_adjustment(self, item, category, model):
+        answer, prompt = None, ""
+
+        if category == "Value Big":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: 1. Change the values in the original context a lot bigger than its original values, 2. The value should be complex instead of whole number \n"
+                f"#Original Question#:{item.context} {item.question}\n" + self.cot
+            )
+            cf = model(prompt)
+
+        elif category == "Change Subject":
+            prompt = (
+                self.instruct
+                + "#Rewrite requirement#: 1. Exchange the Peoples' names among the original question context. So one person's name in the original context is change to another person's name. 2. If there is only one person's name in the original question context, swap the values inside the original question context. 3. The answer is still solvable\n"
+                f"#Original Context#:{item.context}\n"
+                f"#Original Question#:{item.question}\n" + self.cot
+            )
+            cf = model(prompt)
+
+        elif category == "Change Calculation":
+            prompt = (
+                self.instruct
+                + "#Rewrite requirement#: 1. Change the mathematical operation in original question context, so that it reverse the math calculation operation. (+ to - and * to /) 2. Make sure the change fits into the context 3. Make sure the question is solvable and understandable\n"
+                f"#Original Question Context#:{item.context}\n"
+                f"#Original Question#:{item.question}\n" + self.cot
+            )
+            cf = model(prompt)
+
+        return cf, answer, prompt
+
+    def gsm8k_symbolic_manipulation(self, item, category, model):
+        answer, prompt = None, ""
+
+        if category == "Variable Response":
+            prompt = (
+                self.instruct
+                + "#Rewrite Requirement#: 1. randomly replace only one value inside original question context to variable X 2. The question should indicate that the answer to the question also should include variable X.\n"
+                f"#Original Question Context#:{item.context}\n"
+                f"#Original Question#:{item.question}\n" + self.cot
+            )
+            cf = model(prompt)
+
+        elif category == "Variable Relation":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: 1. Find two values (and only two values) that have a relationship with each other in the original context, and replace the these two values inside the original context to variables X and Y. 2. After adding the #original answer# to the #original question#, X and Y's relation can be expressed with a math equation, the new question should ask that relation \n"
+                f"#Original Question Context#:{item.context}\n"
+                f"#Original Question#:{item.question}\n"
+                f"#Original Answer#:{item.answer}\n" + self.cot
+            )
+            cf = model(prompt)
+
+        elif category == "Variable Scaling":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: 1. Pick at least 2 values in the original question context, 2. ask the following question, if those variables scale up by variable X, how will the final answer change in terms of X. \n"
+                f"#Original Question Context#:{item.context}\n"
+                f"#Original Question#:{item.question}\n"
+                f"#Original Answer#:{item.answer}\n" + self.cot
+            )
+            cf = model(prompt)
+
+        elif category == "Variable Adaptation":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: 1. First pick only one specific value from the original question context, 2. and change the rewritten question to the following: If the answer to the original question wants to increase by a certain value Z, and how should X adjust correspondingly if other values stay the same? 3. The adjustment X should be expressed as a function of Z.\n"
+                f"#Original Question Context#:{item.context}\n"
+                f"#Original Question#:{item.question}\n"
+                f"#Original Answer#:{item.answer}\n" + self.cot
+            )
+            cf = model(prompt)
+
+        elif category == "WhatIf Question":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: 1. rewrite the original context by removing only one value (the whole sentence contains that value) from the original context and the rewritten context should be understandable by human 2. Pick another specific value from the original context 3. output the following question as [#counterfactual question#]: [your rewritten context here], [place original question here], If we know the answer to the question is [original answer here] and [the name of the value you picked] in the original question is doubled, how would the final answer change?\n"
+                f"#Original Question Context#:{item.context}\n"
+                f"#Original Question#:{item.question}\n"
+                f"#Original Answer#:{item.answer}\n" + self.cot
+            )
+            cf = model(prompt)
+
+        elif category == "Solve X":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: 1. randomly pick a specific value in original context and replace it with variable X 2. After giving the answer to the original question, the question should ask to solve the variable X\n"
+                f"#Original Question Context#:{item.context}\n"
+                f"#Original Question#:{item.question}\n"
+                f"#Original Answer#:{item.answer}\n" + self.cot
+            )
+            prompt += self.cot
+            cf = model(prompt)
+
+        elif category == "Variable Range":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: 1. Find only one value that have relationship with other values in the original context, replace that value with variable X in original context 2. Change the question to the following: You do not need to solve the question, just find all the possible ranges of values of variable X  that can make the question solvable\n"
+                f"#Original Question Context#:{item.context}\n"
+                f"#Original Question#:{item.question}\n"
+                f"#Original Answer#:{item.answer}\n" + self.cot
+            )
+            cf = model(prompt)
+
+        return cf, answer, prompt
+
+    def gsm8k_question_understanding(self, item, category, model):
+        answer, prompt = None, ""
+
+        if category == "Identify Assumption":
+            prompt = (
+                "Instruction: You do not need to solve question below, just identify the most important hidden assumptions in the question that requires the question to be answerable\n"
+                + item.context
+                + " "
                 + item.question
-                + "(answer may variable x included)\n"
-            )
-            item.answer = ""
-
-        elif dimension == "Variable Adaptation":
-            prompt = """Instruction: Rewrite below original mathematical question based on the #rewrite requirement#.\n"""
-            prompt += "#rewritten requirement#: First pick only one specific value from the original context, and change the rewritten question to the following: If the answer to the original question changes(-/+) by a certain variable X, and how should [the variable you just picked] adjust correspondingly if other values stay the same? "
-            prompt += "Your output should be: [#Rewritten Question#]\n"
-            prompt += f"#Original Context#:{item.context}\n"
-            prompt += f"#Original Question#:{item.question}\n"
-            prompt += "#Rewritten Question#:\n"
-            item.question = model(prompt) + "(The adjustment may include variable X)"
-            item.answer = ""
-
-        elif dimension == "WhatIf Question":
-            prompt = """Instruction: Rewrite below original mathematical question based on the #rewrite requirement#.\n"""
-            prompt += "#rewrite requirement#: 1. rewrite the original context by removing only one value (the whole sentence contains that value) from the original context and the rewritten context should be understandable by human 2. Pick another specific value from the original context 3. output the following question as [#counterfactual question#]: [your rewritten context here], [place original question here], If we know the answer to the question is [original answer here] and [the name of the value you picked] in the original question is doubled, how would the final answer change?"
-            prompt += "Your output should be:\n[#counterfactual question#]\n "
-            prompt += f"#Original Context#:{item.context}\n"
-            prompt += f"#Original Question#:{item.question}\n"
-            prompt += f"#Original Answer#:{item.answer}\n"
-            prompt += "#Counterfactual Question#:\n"
-            output = model(prompt)
-            item.context = ""
-            item.question = output
-            item.answer = ""
-
-        elif dimension == "Theoretical Basis":
-            item.question = (
-                item.question
                 + "\n"
-                + "Instruction: You do not need to solve the question, you only need to identify one underlying mathematical background theory to answer the question."
             )
-            item.answer = ""
+            cf = prompt
 
-        elif dimension == "Code Implementation":
-            item.question = (
-                item.question
-                + "\nInstruction: You should develop a python code to solve the question (you do not need to solve the question yourself)\nCode Solution:"
-            )
-            item.answer = ""
-
-        elif dimension == "Solution Plan":
-            prompt = "You should suggest solution plan by summarizing the solution below, but remove the calculations from the plan"
-            prompt += "Your output should be: [#Solution Plan#]\n"
-            prompt += f"#Solution#:{item.chain_of_thought}\n"
-            output = model(prompt)
-            item.question = (
-                item.question + "\nFollow this plan to solve the question:\n" + output
-            )
-            item.answer = ""
-
-        elif dimension == "Detail Elaboration":
-            prompt = "Instruction: Rewrite below original mathematical question based on the #rewrite requirement#.\n"
-            prompt += "#rewrite requirement#: Identify the hidden assumptions to answer original question, and rewrite the original context by specifying the hidden assumptions inside the original context."
-            prompt += "Your output should only be: [#Rewritten Context#]\n"
-            prompt += f"#Original Context#:{item.context}\n"
-            prompt += f"#Original Question#:{item.question}\n"
-            prompt += "#Rewritten Context#:\n"
-            output = model(prompt)
-            item.context = output
-            item.answer = ""
-
-        elif dimension == "Info Sufficiency":
+        elif category == "Info Sufficiency":
             if random.choice([True, False]):
-                prompt = "Instruction: Rewrite below original mathematical question based on the #rewrite requirement#.\n"
-                prompt += "#rewrite requirement#: rewrite the original context by removing one piece of information and make it looks less noticeable"
-                prompt += "Your output should be: [#Rewritten Context#]\n"
-                prompt += f"#Original Context#:{item.context}\n"
-                prompt += "#Rewritten Context#:\n"
-                output = model(prompt)
-                item.context = output
-            item.question = (
-                item.question
-                + "\n"
-                + "You do not need to solve the question, just judge whether The information given in the context is enough to answer the question."
-            )
-            item.answer = ""
-
-        elif dimension == "Info Necessity":
-            if random.choice([True, False]):
-                prompt = "Instruction: Rewrite the below original mathematical question based on the #rewrite requirement#.\n"
-                prompt += "#rewrite requirement#: rewrite the original context by adding one piece of redundant information contain a value and make sure it look not noticeable"
-                prompt += "Your output should be: [#Rewritten Context#]\n"
-                prompt += f"#Original Context#:{item.context}\n"
-                prompt += "#Rewritten Context#:\n"
-                output = model(prompt)
-                item.context = output
-                item.answer = "True"
+                prompt = (
+                    self.instruct
+                    + "#rewrite requirement#: 1. rewrite the original question context by removing one piece of information and make it looks less noticeable\n"
+                    f"#Original Context#:{item.context}\n"
+                    f"#Original Question#:{item.question}\n" + self.cot
+                )
+                cf = model(prompt)
+                answer = True
             else:
-                item.answer = "False"
-            item.question = (
-                item.question
+                answer = False
+                cf = f"{item.context} {item.question}"
+            cf = (
+                cf
                 + "\n"
-                + "Instruction: You do not need to solve the question, just judge whether there are redundant values given in order to answer the question?"
+                + "Instruction: You do not need to solve the question, just judge whether The information given in the context is enough to answer the question."
             )
+        elif category == "Question Formulation":
+            prompt = f"Instruction: Extract the math calculations only inside the following sentences.\n{item.chain_of_thought}"
+            output = model(prompt)
+            cf = (
+                "Instruction: Formulate a math application question that requires the following calculations\n"
+                + "Calculations:\n"
+                + output
+                + "\nMath Question:"
+            )
+            answer = f"{item.context} {item.question}"
 
-        elif dimension == "Step Necessity":
-            prompt = "Instruction: Rewrite the below original mathematical question based on the #rewrite requirement#.\n"
-            prompt += "#rewrite requirement#: 1. Pick a value from step by step answer to the original question, and rewrite the original question to the following: Whether there are any alternative solutions without calculating [value name you picked]?"
-            prompt += "Your output should be: [#Rewritten Question#]\n"
-            prompt += f"#Original Context#:{item.context}\n"
-            prompt += f"#Original Question#:{item.question}\n"
-            prompt += f"Step by Step answer to the original question:{item.chain_of_thought}\n"
-            prompt += "#Rewritten Question#:\n"
+        elif category == "Introduce Distraction":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: introduce a few new pieces of information as distraction in the original context that at first glance seems affecting the final answer but in fact should not affect the answer to the question\n"
+                f"#Original Question Context#:{item.context}\n"
+                f"#Original Question#:{item.question}\n" + self.cot
+            )
+            cf = model(prompt)
+
+        return cf, answer, prompt
+
+    def gsm8k_solution_evaluation(self, item, category, model):
+        answer, prompt = None, ""
+
+        if category == "Info Necessity":
+            if random.choice([True, False]):
+                prompt = (
+                    self.instruct
+                    + "#rewrite requirement#: rewrite the original context by adding one piece of redundant information contain a value and make sure it look not noticeable"
+                    + self.cot
+                )
+                output = model(prompt)
+                cf = (
+                    output
+                    + "\n"
+                    + item.question
+                    + "\n"
+                    + "Instruction: You do not need to solve the question, just judge whether there are redundant values given in order to answer the question?"
+                )
+                answer = True
+            else:
+                cf = (
+                    item.context
+                    + "\n"
+                    + item.question
+                    + "\n"
+                    + "Instruction: You do not need to solve the question, just judge whether there are redundant values given in order to answer the question?"
+                )
+
+                answer = False
+
+        elif category == "Step Necessity":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: 1. Pick a value from step by step answer to the original question, and rewrite the original question to the following: Whether there are any alternative solutions without calculating [value name you picked]?\n"
+                "#Original Context#:{item.context}\n"
+                "#Original Question#:{item.question}\n"
+                "Step by Step answer to the original question:{item.chain_of_thought}\n"
+                + self.cot
+            )
             output = model(prompt)
             item.context = "Question:\n" + item.context.strip()
             item.question = (
@@ -1389,154 +1480,100 @@ class PerturbTemplate(BaseModel):
                 + output
                 + "(You do not need to solve the question)"
             )
-            item.answer = ""
+            cf = item.context + "\n" + item.question
 
-        elif dimension == "Variable Range":
-            prompt = "Instruction: Rewrite the below original mathematical question based on the #rewrite requirement#.\n"
-            prompt += "#rewrite requirement#: Find only one value that have relationship with other values in the original context, replace that value with variable X in original context"
-            prompt += "Your output should be: [#Rewritten Context#]\n"
-            prompt += f"#Original Context#:{item.context}\n"
-            prompt += "#Rewritten COntext#:\n"
-            output = model(prompt)
-            item.context = output
+        elif category == "Theoretical Basis":
             item.question = (
                 item.question
                 + "\n"
-                + "Instruction: You do not need to solve the question, just find the possible ranges of values of variable X based on the question"
+                + "Instruction: You do not need to solve the question, you only need to identify one underlying mathematical background theory to answer the question."
             )
+            prompt = item.context + "\n" + item.question
+            cf = prompt
 
-        elif dimension == "Identical Question":
-            prompt = "Instruction: Rewrite the below original mathematical question based on the #rewrite requirement#.\n"
-            if random.choice([True, False]):
-                prompt += "#rewrite requirement#: First, change the order of the sequence the information is provided. Second, rephrase the original question by changing the application scenario and values used. Then change the question to make it require more steps to reach the final answer."
-                item.answer = "True"
+        elif category == "Solution Efficiency":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: 1. Give me two solution plans on this question, one is efficient and the other is in efficient. Each plan need to be under 2 sentences and have equal amount of sentences and only include the overall plan without any calculations. 2. Ask which solution is more efficient given the question.\n"
+                f"#original question#: {item.context} {item.question}" + self.cot
+            )
+            cf = model(prompt)
 
-            else:
-                prompt += "#rewrite requirement#: First, change the order of the sequence the information is provided. Second, rephrase the original question by changing the application scenario and values used"
-                item.answer = "False"
-            prompt += "Your output should be: [#Rewritten Question#]\n"
-            prompt += f"#Original Question#:{item.context} {item.question}\n"
-            prompt += "#Rewritten Question#:\n"
-            output = model(prompt)
-            item.context = (
-                f"Question 1: {item.context} {item.question}\nQuestion 2: {output}\n"
-            )
-            item.question = (
-                "Does Question 1 and Question 2 require same amount step to answer?"
-            )
+        return cf, answer, prompt
 
-        elif dimension == "Identify Assumption":
-            item.context = (
-                "Instruction: No need to solve question below, just identify one most important hidden assumption in the question that requires the question to be answerable\n"
-                + item.context
+    def gsm8k_error_debugging(self, item, category, model):
+        answer, prompt = None, ""
+        if category == "Introduce Ambiguity":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: Change the original question to have multiple possible interpretations\n"
+                f"#Question#:{item.context}{item.question}\n" + self.cot
             )
-            item.answer = ""
+            cf = model(prompt)
 
-        elif dimension == "Discuss Separately":
-            prompt = "Instruction: Rewrite the below original mathematical question based on the #rewrite requirement#.\n"
-            prompt += "#rewrite requirement#: Replace one value with variable in original context. Make sure that the expression of the answer varies with different range of values of this variable"
-            prompt += "Your output should only be: [#Rewritten Context#]\n"
-            prompt += f"#Original Context#:{item.context}\n"
-            prompt += f"#Original Question#:{item.question}\n"
-            prompt += "#Rewritten Context#:\n"
-            output = model(prompt)
-            item.context = output
-            item.answer = ""
+        elif category == "Discuss Separately":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: Replace one value with variable in original context. Make sure that the expression of the answer varies with different range of values of this variable\n"
+                f"#Original Context#:{item.context}\n"
+                f"#Original Question#:{item.question}\n" + self.cot
+            )
+            cf = model(prompt)
 
-        elif dimension == "Theoretical Challenge":
-            prompt = "Change the #Question# below to ask for a value that will converge after infinite number of calculations, the result should be human understandable and solvable\n"
-            prompt += f"#Question#:{item.context} {item.question}\n"
-            output = model(prompt)
-            item.question = output
-            item.context = ""
-            item.answer = ""
-        elif dimension == "Define Rules":
-            prompt = "Instruction: Rewrite the below original mathematical question based on the #rewrite requirement#.\n"
-            prompt += "#rewrite requirement#: formulate a special mathematical calculation operation that does not exist in real world. Also change the original question to include this rule in the question. Make sure the rewritten question is still human understandable.\n"
-            prompt += "Your output should be: [#Rewritten Question#]\n"
-            prompt += f"#Original Question#:{item.context} {item.question}\n"
-            prompt += "#Rewritten Question#:\n"
-            output = model(prompt)
-            item.question = output
-            item.context = ""
-            item.answer = ""
-        elif dimension == "Binary Coded":
-            n = random.choice([2, 3, 4, 5, 6])
-            item.context = (
-                f"Instruction: Answer the following question with only base-{n} coded values:\n"
-                + item.context
+        elif category == "Introduce Contradiction":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: Introduce a intermediate variable with value conflicting with the chain of thought answer below. The added value should not directly conflict with information inside the question\n"
+                f"#Original Question Context#:{item.context}\n"
+                f"#Original Question#:{item.question}\n"
+                f"#Chain of thought answer to the original question#: {item.chain_of_thought}"
+                + self.cot
             )
-            item.answer = ""
-        elif dimension == "X Language":
-            language = random.choice(
-                ["Spanish", "Chinese", "Bengali", "French", "Russian"]
-            )
-            item.context = (
-                f"Instruction: Answer the following question with only {language} language, because I do not understand English\n"
-                + item.context
-            )
-            item.answer = ""
-        elif dimension == "Alternative Question":
-            item.context = (
-                "Instruction: Rephrase the question above in another application scenario without changing the mathematical core structure of the question, you do not need to answer it: \n"
-                + item.context
-            )
-            item.answer = ""
-        elif dimension == "Alternative Answer":
-            prompt = "Remove all the mathematical calculation, equation and numbers from the solution below, make sure the output is still human understandable:\n"
-            prompt += f"#Solution#:{item.chain_of_thought}\n"
-            output = model(prompt)
-            item.context = (
-                "Instruction: Give an alternative step by step solution and calculate the answer to the following question that is different from the solution below.\nQuestion:"
-                + item.context
-            )
-            item.question = (
-                item.question
-                + "\nSolution:\n"
-                + output
-                + "\nAlternative Step by Step Solution:"
-            )
-            item.answer = ""
-        elif dimension == "Question Formulation":
-            item.context = "Instruction: Formulate a math application question that requires the following calculations\n"
-            prompt = f"Instruction: Extract the math calculations only inside the following sentences.\n{item.chain_of_thought}"
-            output = model(prompt)
-            item.question = "Calculations:\n" + output + "\nMath Question:"
-            item.answer = ""
+            cf = model(prompt)
 
-        elif dimension == "Solve X":
-            prompt = "Instruction: Rewrite the below original mathematical question based on the #rewrite requirement#.\n"
-            prompt += "#rewrite requirement#: randomly pick a specific value in original context and replace it with variable X"
-            prompt += "Your output should be: [#Rewritten Context#]\n"
-            prompt += f"#Original Context#:{item.context}\n"
-            prompt += "#Rewritten Context#:\n"
-            output = model(prompt)
-            item.context = output
-            item.question = (
-                item.question
-                + "\n"
-                + f"If the answer for the question is {item.answer} what is the value for X"
+        elif category == "Value Uncommon":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: use uncommon values in the original context that seems wired or impossible by commonsense\n"
+                f"#Original Question Context#:{item.context}\n"
+                f"#Original Question#: {item.question}\n" + self.cot
             )
-            item.answer = ""
-        elif dimension == "Change Sequence":
-            prompt = "Instruction: Rewrite the below original mathematical question based on the #rewrite requirement#.\n"
-            prompt += "#rewrite requirement#: change the order sequence of the information completely in the original context. Make sure the rewritten context is still human readable"
-            prompt += "Your output should be: [#Rewritten Context#]\n"
-            prompt += f"#Original Context#:{item.context}\n"
-            prompt += "#Rewritten Context#:\n"
-            output = model(prompt)
-            item.context = output
-            item.answer = item.answer
-        elif dimension == "Value Structuring":
-            prompt = "Instruction: Rewrite the below original mathematical question based on the #rewrite requirement#.\n"
-            prompt += "#rewrite requirement#: use variables to replace the values in the original context and put the variables' values inside the question to a table format"
-            prompt += "Your output should be: [#Rewritten Context#]\n"
-            prompt += f"#Original Context#:{item.context}\n"
-            prompt += "#Rewritten Context#:\n"
-            output = model(prompt)
-            item.context = output
-            item.answer = item.answer
-        elif dimension == "True False":
+            cf = model(prompt)
+
+        elif category == "Value Error":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: Change the values in original context so that it can cause a commonsense error or logical error in the question\n"
+                f"#Original Context#:{item.context}\n" + self.cot
+            )
+            context = model(prompt)
+            cf = context + "\n" + item.question
+
+        return cf, answer, prompt
+
+    def gsm8k_alternative_format(self, item, category, model):
+        answer, prompt = None, ""
+
+        if category == "Change Setting":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: Rephrase the original question by changing the application scenario or situation to a completely different one but keep the math core structure. Then change all the person's names and values\n"
+                f"#Original Question#:{item.context} Query: {item.question}\n"
+                + self.cot
+            )
+            cf = model(prompt)
+
+        elif category == "Change Sequence":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: change the order sequence of the information completely in the original context. Make sure the rewritten context is still human readable\n"
+                f"#Original Context#:{item.context}\n" + self.cot
+            )
+            context = model(prompt)
+            answer = item.answer
+            cf = item.context + "\n" + item.question
+
+        elif category == "True False":
             if not random.choice([True, False]):
                 prompt = "Instruction: Give one step by step misleading answer for this question that seems corerct:"
                 prompt += f"#Original Question#:{item.context} {item.question}\n"
@@ -1545,124 +1582,125 @@ class PerturbTemplate(BaseModel):
                 item.question = (
                     item.question + f"Evaluate the correctness of this answer: {output}"
                 )
-                item.answer = "False"
+                item.answer = False
             else:
+                prompt = "Give the original answer"
                 item.question = (
                     item.question
                     + f"Evaluate the correctness of this answer: {item.answer}"
                 )
-                item.answer = "True"
-        elif dimension == "Introduce Distraction":
-            prompt = "Instruction: Rewrite the below original mathematical question based on the #rewrite requirement#.\n"
-            prompt += "#rewrite requirement#: introduce a few new pieces of information as distraction in the original context that at first glance seems affecting the final answer but in fact should not affect the answer to the question"
-            prompt += "Your output should only be: [#Rewritten Context#]\n"
-            prompt += f"#Original Context#:{item.context}\n"
-            prompt += f"#Original Question#:{item.question}\n"
-            prompt += "#Rewritten Context#:\n"
-            output = model(prompt)
-            item.context = output
-            item.answer = item.answer
+                item.answer = True
+            cf = item.context + "\n" + item.question
 
-        elif dimension == "Introduce Contradiction":
-            prompt = "Instruction: Rewrite the below original mathematical question based on the #rewrite requirement#.\n"
-            prompt += "#rewrite requirement#: Introduce a intermediate variable with value conflicting with the chain of thought answer below. The added value should not directly conflict with information inside the question"
-            prompt += "Your output should only be: [#Rewritten Context#]\n"
-            prompt += f"#Original Context#:{item.context}\n"
-            prompt += f"#Original Question#:{item.question}\n"
-            prompt += f"#Chain of thought answer to the original question#: {item.chain_of_thought}"
-            prompt += "#Rewritten Context#:\n"
-            output = model(prompt)
-            item.context = output
-            item.answer = "no correct answer"
-        elif dimension == "Introduce Ambiguity":
-            prompt = "Change the original question to have multiple possible interpretations\n"
-            prompt += f"#Question#:{item.context}{item.question}\n"
-            prompt += "#Rewritten Question#:\n"
-            output = model(prompt)
-            item.context = ""
-            item.question = output
-            item.answer = "no correct answer"
+        elif category == "Value Structuring":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: use variables to replace the values in the original context and put the variables' values inside the question to a table format\n"
+                f"#Original Context#:{item.context}\n" + self.cot
+            )
+            context = model(prompt)
+            cf = context + "\n" + item.question
 
-        elif dimension == "Value Uncommon":
-            prompt = "Instruction: Rewrite the below original mathematical question based on the #rewrite requirement#.\n"
-            prompt += "#rewrite requirement#: use uncommon values in the original context that seems wired or impossible by commonsense"
-            prompt += "Your output should be: [#Rewritten Context#]\n"
-            prompt += f"#Original Context#:{item.context}\n"
-            prompt += "#Rewritten Context#:\n"
-            output = model(prompt)
-            item.context = output
-            item.answer = "no correct answer"
+        return cf, answer, prompt
 
-        elif dimension == "Value Error":
-            prompt = "Instruction: Rewrite the below original mathematical question based on the #rewrite requirement#.\n"
-            prompt += "#rewrite requirement#: Change the values in original context so that it can cause a commonsense error or logical error in the question"
-            prompt += "Your output should be: [#Rewritten Context#]\n"
-            prompt += f"#Original Context#:{item.context}\n"
-            prompt += "#Rewritten Context#:\n"
+    def gsm8k_pairwise_comparison(self, item, category, model):
+        answer, prompt = None, ""
+        if category == "Identical Question":
+            prompt = self.instruct
+            if random.choice([True, False]):
+                prompt += "#rewrite requirement#: First, change the order of the sequence the information is provided. Second, rephrase the original question by changing the application scenario and values used. Then change the question to make it require more steps to reach the final answer.\n"
+                answer = True
+
+            else:
+                prompt += "#rewrite requirement#: First, change the order of the sequence the information is provided. Second, rephrase the original question by changing the application scenario and values used\n"
+                answer = False
+            prompt += f"#Original Question#:{item.context} {item.question}\n"
+            prompt += self.cot
             output = model(prompt)
-            item.context = output
-            item.answer = "no correct answer"
-        elif dimension == "Value Big":
-            prompt = "Instruction: Rewrite the below original mathematical question based on the #rewrite requirement#.\n"
-            prompt += "#rewrite requirement#: Change the values in the original context a lot bigger than its original values"
-            prompt += "Your output should be: [#Rewritten Context#]\n"
-            prompt += f"#Original Context#:{item.context}\n"
-            prompt += "#Rewritten Context#:\n"
+            item.context = (
+                f"Question 1: {item.context} {item.question}\nQuestion 2: {output}\n"
+            )
+            item.question = (
+                "Does Question 1 and Question 2 require same amount step to answer?"
+            )
+            cf = item.context + "\n" + item.question
+        return cf, answer, prompt
+
+    def gsm8k_answer_constraint(self, item, category, model):
+        answer, prompt = None, ""
+        if category == "Binary Coded":
+            n = random.choice([2, 3, 4, 5, 6])
+            item.context = (
+                f"Instruction: Answer the following question with only base-{n} coded values:\n"
+                + item.context
+            )
+            cf = item.context + "\n" + item.question
+
+        elif category == "X Language":
+            language = random.choice(
+                ["Spanish", "Chinese", "Bengali", "French", "Russian"]
+            )
+            item.context = (
+                f"Instruction: Answer the following question with only {language} language, because I do not understand English\n"
+                + item.context
+            )
+            cf = item.context + "\n" + item.question
+
+        elif category == "Alternative Answer":
+            prompt = "Remove all the mathematical calculation, equation and numbers from the solution below, make sure the output is still human understandable:\n"
+            prompt += f"#Solution#:{item.chain_of_thought}\n"
             output = model(prompt)
-            item.context = output
-            item.answer = ""
-        elif dimension == "Value Unit":
-            prompt = "Instruction: Rewrite the below original mathematical question based on the #rewrite requirement#.\n"
-            prompt += "#rewrite requirement#: Change only one values' unit in the original context to a different unit"
-            prompt += "Your output should be: [#Rewritten Context#]\n"
-            prompt += f"#Original Context#:{item.context}\n"
-            prompt += "#Rewritten Context#:\n"
-            output = model(prompt)
-            item.context = output
-            item.answer = ""
-        elif dimension == "Value Complex":
-            prompt = "Instruction: Rewrite the below original mathematical question based on the #rewrite requirement#.\n"
-            prompt += "#rewrite requirement#: Change one or two values in the original context to a more complex 5 digit value that poses a challenge for computation (You do not need to change all the values)"
-            prompt += "Your output should be: [#Rewritten Context#]\n"
-            prompt += f"#Original Context#:{item.context}\n"
-            prompt += "#Rewritten Context#:\n"
-            output = model(prompt)
-            item.context = output
-            item.answer = ""
-        elif dimension == "Value Type":
-            prompt = "Instruction: Rewrite the below original mathematical question based on the #rewrite requirement#.\n"
-            prompt += "#rewrite requirement#: Change the values in the original context to a different type of value (e.g. from integer to float or fractions). The values do not need to be the same"
-            prompt += "Your output should be: [#Rewritten Context#]\n"
-            prompt += f"#Original Context#:{item.context}\n"
-            prompt += "#Rewritten Context#:\n"
-            output = model(prompt)
-            item.context = output
-            item.answer = ""
-        elif dimension == "Value Probability":
-            prompt = "Instruction: Rewrite the below original mathematical question based on the #rewrite requirement#.\n"
-            prompt += "#rewrite requirement#: Change only one deterministic value in the original context to one with probability. For example, The value have a 30% chance to be 10, and 70% chance to be 17. Make sure The rewritten context should be understandable by human"
-            prompt += "Your output should be: [#Rewritten Context#]\n"
-            prompt += f"#Original Context#:{item.context}\n"
-            prompt += "#Rewritten Context#:\n"
-            output = model(prompt)
-            item.context = output
-            item.question += "(Give the estimated value)"
-            item.answer = ""
-        elif dimension == "Value Negative":
-            prompt = "Instruction: Rewrite the below original mathematical question based on the #rewrite requirement#.\n"
-            prompt += "#rewrite requirement#: Change only one value in the original context to negative value. The values do not need to be the same."
-            prompt += "Your output should be: [#Rewritten Context#]\n"
-            prompt += f"#Original Context#:{item.context}\n"
-            prompt += "#Rewritten Context#:\n"
-            output = model(prompt)
-            item.context = output
-            item.answer = ""
+            item.context = (
+                "Instruction: Give an alternative solution in maximum two sentences that is different from the solution below.\nQuestion:"
+                + item.context
+            )
+            item.question = (
+                item.question
+                + "\nSolution:\n"
+                + output
+                + "\nAlternative Step by Step Solution:"
+            )
+            cf = item.context + "\n" + item.question
+
+        elif category == "Define Rules":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: formulate a special mathematical calculation operation that does not exist in real world. Also change the original question to include this rule in the question. Make sure the rewritten question is still human understandable.\n"
+                f"#Original Question#:{item.context} {item.question}\n" + self.cot
+            )
+            cf = model(prompt)
+
+        return cf, answer, prompt
+
+    def __call__(self, dimension, item, category, model):
+        if dimension == "Question Simplification":
+            method = self.gsm8k_question_simplification
+        elif dimension == "Reasoning Adjustment":
+            method = self.gsm8k_reasoning_adjustment
+        elif dimension == "Computation Adjustment":
+            method = self.gsm8k_computation_adjustment
+        elif dimension == "Symbolic Manipulation":
+            method = self.gsm8k_symbolic_manipulation
+        elif dimension == "Question Understanding":
+            method = self.gsm8k_question_understanding
+        elif dimension == "Solution Evaluation":
+            method = self.gsm8k_solution_evaluation
+        elif dimension == "Error Debugging":
+            method = self.gsm8k_error_debugging
+        elif dimension == "Alternative Format":
+            method = self.gsm8k_alternative_format
+        elif dimension == "Pairwise Comparison":
+            method = self.gsm8k_pairwise_comparison
+        elif dimension == "Answer Constraint":
+            method = self.gsm8k_answer_constraint
         else:
-            print("Error:", dimension)
+            raise ValueError(f"dimension {dimension} is not supported")
 
-        return item
+        return method(item, category, model)
 
-    def human_eval(self, item, dimension, model):
+
+class PerturbTemplateHumanEval(BaseModel):
+    def __call__(self, domain, item, dimension, model):
         if dimension == "Restrict Requirement":
             # Question
             prompt = "Instruction: Rewrite the below original coding question based on the #rewrite requirement#.\n"
@@ -2189,10 +2227,4 @@ class PerturbTemplate(BaseModel):
 
 
 if __name__ == "__main__":
-    l = Ontoloty().gsm8k_question_list()
-    for o in l:
-        print(o.context + " " + o.question + " " + o.answer)
-
-    l = Ontoloty().human_eval_question_list()
-    for o in l:
-        print(o.function_header + o.docstring + o.examples + o.answer + o.test_case)
+    pass

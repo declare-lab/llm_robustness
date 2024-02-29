@@ -3,7 +3,12 @@ import json
 import pandas as pd
 import tqdm
 from fire import Fire
-from ontology import gsm8k_ontology_dict, human_eval_ontology_dict
+
+from ontology import Ontology
+
+ont = Ontology()
+gsm8k_ontology_dict = ont.gsm8k()
+human_eval_ontology_dict = ont.human_eval()
 
 
 def gsm8k_to_json():
