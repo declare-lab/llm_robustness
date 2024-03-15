@@ -1,5 +1,4 @@
 import random
-
 from pydantic import BaseModel
 
 
@@ -660,25 +659,23 @@ Lily found <<16=16>>16 insects.""",
     def human_eval_original(self):
         return [
             Human_eval_Item(
-                function_header="""
-def is_nested(string):
-""",
+                function_header="""def is_nested(string):""",
                 docstring='''
-"""
+    """
     Create a function that takes a string as input which contains only square brackets.
     The function should return True if and only if there is a valid subsequence of brackets 
     where at least one bracket in the subsequence is nested.
-"""
+    """
 ''',
                 examples='''
-"""
+    """
     is_nested('[[]]') ➞ True
     is_nested('[]]]]]]][[[[[]') ➞ False
     is_nested('[][]') ➞ False
     is_nested('[]') ➞ False
     is_nested('[[][]]') ➞ True
     is_nested('[[]][[') ➞ True
-"""
+    """
 ''',
                 test_case="""
 def check(candidate):
@@ -725,9 +722,7 @@ def check(candidate):
         ]
         return [
             Human_eval_Item(
-                function_header="""
-def flip_case(string: str) -> str:
-""",
+                function_header="""def flip_case(string: str) -> str: """,
                 docstring='''
     """For a given string, flip lowercase characters to uppercase and uppercase to lowercase."""
 ''',
@@ -737,17 +732,9 @@ def flip_case(string: str) -> str:
     """
 ''',
                 answer="""
-
-
     return string.swapcase()
 """,
                 test_case="""
-METADATA = {
-    'author': 'jt',
-    'dataset': 'test'
-}
-
-
 def check(candidate):
     assert candidate('') == ''
     assert candidate('Hello!') == 'hELLO!'
@@ -756,9 +743,7 @@ def check(candidate):
                 entry="flip_case",
             ),
             Human_eval_Item(
-                function_header="""
-def derivative(xs: list):
-""",
+                function_header="""def derivative(xs: list): """,
                 docstring='''
     """ xs represent coefficients of a polynomial.
     xs[0] + xs[1] * x + xs[2] * x^2 + ....
@@ -774,14 +759,9 @@ def derivative(xs: list):
     """
 ''',
                 answer="""
-
-
     return [(i * x) for i, x in enumerate(xs)][1:]
 """,
                 test_case="""
-METADATA = {}
-
-
 def check(candidate):
     assert candidate([3, 1, 2, 4, 5]) == [1, 4, 12, 20]
     assert candidate([1, 2, 3]) == [2, 6]
@@ -792,12 +772,9 @@ def check(candidate):
                 entry="derivative",
             ),
             Human_eval_Item(
-                function_header="""
-def greatest_common_divisor(a: int, b: int) -> int:
-""",
+                function_header="""def greatest_common_divisor(a: int, b: int) -> int:""",
                 docstring='''
-    """ Return a greatest common divisor of two integers a and b
-    """
+    """ Return a greatest common divisor of two integers a and b """
 ''',
                 examples='''
     """
@@ -808,19 +785,11 @@ def greatest_common_divisor(a: int, b: int) -> int:
     """
     ''',
                 answer="""
-
-
     while b:
         a, b = b, a % b
     return a
 """,
                 test_case="""
-METADATA = {
-    'author': 'jt',
-    'dataset': 'test'
-}
-
-
 def check(candidate):
     assert candidate(3, 7) == 1
     assert candidate(10, 15) == 5
@@ -830,25 +799,23 @@ def check(candidate):
                 entry="greatest_common_divisor",
             ),
             Human_eval_Item(
-                function_header="""
-def is_nested(string):
-""",
+                function_header="""def is_nested(string): """,
                 docstring='''
-"""
+    """
     Create a function that takes a string as input which contains only square brackets.
     The function should return True if and only if there is a valid subsequence of brackets 
     where at least one bracket in the subsequence is nested.
-"""
+    """
 ''',
                 examples='''
-"""
+    """
     is_nested('[[]]') ➞ True
     is_nested('[]]]]]]][[[[[]') ➞ False
     is_nested('[][]') ➞ False
     is_nested('[]') ➞ False
     is_nested('[[][]]') ➞ True
     is_nested('[[]][[') ➞ True
-"""
+    """
 ''',
                 test_case="""
 def check(candidate):
@@ -893,9 +860,7 @@ def check(candidate):
                 entry="is_nested",
             ),
             Human_eval_Item(
-                function_header="""
-def sum_squares(lst):
-""",
+                function_header="""def sum_squares(lst): """,
                 docstring='''
     """"
     This function will take a list of integers. For all entries in the list, the function shall square the integer entry if its index is a 
@@ -925,8 +890,6 @@ def sum_squares(lst):
                 test_case="""
 def check(candidate):
 
-    # Check some simple cases
-
     assert candidate([1,2,3]) == 6
     assert candidate([1,4,9]) == 14
     assert candidate([]) == 0
@@ -938,9 +901,6 @@ def check(candidate):
     assert candidate([-1,0,0,0,0,0,0,0,-1]) == 0
     assert candidate([-16, -9, -2, 36, 36, 26, -20, 25, -40, 20, -4, 12, -26, 35, 37]) == -14196
     assert candidate([-1, -3, 17, -1, -15, 13, -1, 14, -14, -12, -5, 14, -14, 6, 13, 11, 16, 16, 4, 10]) == -1448
-
-
-    # Don't remove this line:
 """,
                 entry="sum_squares",
             ),
@@ -1136,7 +1096,7 @@ Answer: [final answer]
         )
         return prompt
 
-    def gsm8k_filter_refine(self, item, perturbed_q, requirement, model):
+    def filter_refine_gsm8k(self, item, perturbed_q, requirement, model):
         prompt = (
             "Instruction: Given an #original question# and a #perturbed question# transformed from #requirement#, do the following things:\n"
             "1. if #perturbed question# only contain the question, fulfill the available information from #original question#\n"
@@ -1152,10 +1112,26 @@ Answer: [final answer]
 
         return refined_perturbed_q
 
+    def filter_refine_human_eval(self, item, perturbed_q, requirement, model):
+        prompt = (
+            "Instruction: Given an #original question# and a #perturbed question# transformed from #requirement#, do the following things:\n"
+            "1. if #perturbed question# only contain the question, fulfill the available information from #original question#\n"
+            "2. Check if the #perturbed question# is human understandable. If not, make it clearer and more natural\n"
+            "3. Check if the #perturbed question# fulfills the #requirement# based on the #original requirement#. If not, refine it to follow the #requirement#.\n"
+            "4. Finally you should ouput the question only in #perturbed question# after refinement\n"
+            f"#original question#: {item.function_header}{item.docstring}{item.examples}\n"
+            f"#perturbed question#: {perturbed_q}\n"
+            f"#requirement#: {requirement}\n"
+        )
+
+        refined_perturbed_q = model(prompt)
+
+        return refined_perturbed_q
+
 
 class PerturbTemplateGSM8K(BaseModel):
-    cot = "You should analyze the #rewrite requirement# first before create the question, as the requirement is complicated. You should create the question in a step by step manner, instead of directly output the perturbed question\n"
     instruct = "Instruction: Create a new question following the #rewrite requirement# based on original question.\n"
+    cot = "You should analyze the #rewrite requirement# first in a step by step manner first before create the new math question, as the requirement is complicated.\n"
 
     def gsm8k_question_simplification(self, item, category, model):
         answer, prompt = None, ""
@@ -1700,133 +1676,102 @@ class PerturbTemplateGSM8K(BaseModel):
 
 
 class PerturbTemplateHumanEval(BaseModel):
-    def __call__(self, domain, item, dimension, model):
-        if dimension == "Restrict Requirement":
-            # Question
-            prompt = "Instruction: Rewrite the below original coding question based on the #rewrite requirement#.\n"
-            prompt += "#rewrite requirement#: Add a new further condition that modifies the coding requirement in #original coding question# that make the coding requirment harder\n"
-            prompt += "Your output should be: [#Rewritten Coding Question#]\n"
-            prompt += f"#Original Coding Question#:{item.function_header}{item.docstring}{item.examples}\n"
-            prompt += "#Rewritten Coding Question#:\n"
-            output = model(prompt)
-            item.function_header = output
-            item.docstring = ""
-            item.examples = ""
-            item.answer = ""
+    instruct = "Instruction: Create a new question following the #rewrite requirement# based on original question. You should analyze the #rewrite requirement# and #original coding question# first in a step by step manner first before create the new math question, as the requirement is complicated.\n"
 
-        elif dimension == "Further Requirement":
-            # Question
-            prompt = "Instruction: Rewrite the below original coding question based on the #rewrite requirement#.\n"
-            prompt += "#rewrite requirement#: Add a further requirement on top of the achieved results in #original coding question#\n"
-            prompt += "Your output should be: [#Rewritten Coding Question#]\n"
-            prompt += f"#Original Coding Question#:{item.function_header}{item.docstring}{item.examples}\n"
-            prompt += "#Rewritten Coding Question#:\n"
-            output = model(prompt)
-            item.function_header = output
-            item.docstring = ""
-            item.examples = ""
-            item.answer = ""
+    def whole(self, item):
+        return f"{item.function_header}{item.docstring}{item.examples}"
 
-        elif dimension == "Parallel Requirement":
-            # Question
-            prompt = "Instruction: Rewrite the below original coding question based on the #rewrite requirement#.\n"
-            prompt += "#rewrite requirement#: Add a further requirement that can be achieved in parallel with the requirement in #original coding question#\n"
-            prompt += "Your output should be: [#Rewritten Coding Question#]\n"
-            prompt += f"#Original Coding Question#:{item.function_header}{item.docstring}{item.examples}\n"
-            prompt += "#Rewritten Coding Question#:\n"
-            output = model(prompt)
-            item.function_header = output
-            item.docstring = ""
-            item.examples = ""
-            item.answer = ""
-
-        elif dimension == "Remove Requirement":
-            # Question
-            prompt = "Instruction: Rewrite the below original coding question based on the #rewrite requirement#.\n"
-            prompt += "#rewrite requirement#: Make the requirement in #original coding question# easier.\n"
-            prompt += "Your output should be: [#Rewritten Coding Question#]\n"
-            prompt += f"#Original Coding Question#:{item.function_header}{item.docstring}{item.examples}\n"
-            prompt += "#Rewritten Coding Question#:\n"
-            output = model(prompt)
-            item.function_header = output
-            item.docstring = ""
-            item.examples = ""
-            item.answer = ""
-
-        elif dimension == "Helper Function":
-            # Question
-            prompt = "#rewrite requirement#: Add a helper function that can help to partially achieve the requirement in #original coding question# You do not need to answer the question\n"
-            prompt += "Your output should be python program only: [#Helper Function#]\n"
-            prompt += f"#Original Coding Question#:{item.function_header}{item.docstring}{item.examples}\n"
-            prompt += "#Helper Function#:\n"
-            output = model(prompt)
-            item.function_header = output + "\n" + item.function_header
-            item.docstring = (
-                item.docstring
-                + '''    """\nUse the helper function above to achieve the requirement"""'''
+    def human_eval_question_simplification(self, item, category, model):
+        prompt, answer = None, None
+        if category == "Remove Constraint":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: Make the requirement in #original coding question# easier.\n"
+                "#Original Coding Question#:" + self.whole(item) + "\n"
             )
-            item.answer = ""
-
-        elif dimension == "Change Docstring":
-            # Question
-            prompt = "Instruction: Rewrite the below original coding question based on the #rewrite requirement#.\n"
-            prompt += "#rewrite requirement#: Change the requirement in docstring in #original coding question# to require a related but different solution\n"
-            prompt += "Your output should be: [#Rewritten Coding Question#]\n"
-            prompt += f"#Original Coding Question#:{item.function_header}{item.docstring}{item.examples}\n"
-            prompt += "#Rewritten Coding Question#:\n"
+            cf = model(prompt)
+        elif category == "Helper Function":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: Add a helper function that can help to partially achieve the requirement in #original coding question#. You do not need to answer the question\n"
+                "#Original Coding Question#:" + self.whole(item) + "\n"
+            )
             output = model(prompt)
-            item.function_header = output
-            item.docstring = ""
-            item.examples = ""
-            item.answer = ""
+            cf = (
+                "Use the helper function above to achieve the requirement\n"
+                + self.whole(item)
+                + "\n"
+                + output
+            )
+        elif category == "Solution Plan":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: The rewritten question should suggest a commented solution plan add add it at the back of original coding question, without giving implementation specified in the plan.\n"
+                "Your output should be: [#Rewritten Coding Question#]\n"
+                "#Original Coding Question#:" + self.whole(item) + "\n"
+                "#Rewritten Coding Question#:\n"
+            )
+            cf = model(prompt)
 
-        elif dimension == "Change Example":
-            # Question
-            prompt = "Instruction: Rewrite the below original coding question based on the #rewrite requirement#.\n"
-            prompt += "#rewrite requirement#: Generate new examples in #original coding question examples#, Make sure the generated examples is still correct based on the requirement described in the docstring, keep the number of examples same as before\n"
-            prompt += "Your output should only be: [#Rewritten Coding Examples#]\n"
-            prompt += f"#Original Coding Question Function Header#:{item.function_header}{item.docstring}\n"
-            prompt += "#Original Coding Question Examples#:{item.examples}\n"
-            prompt += "#Rewritten Coding Examples#:\n"
-            output = model(prompt)
-            if not ('"""' in output or "'''" in output):
-                output = "'''" + "\n" + output + "\n" + "'''"
-            item.examples = output
-            item.answer = ""
+        elif category == "Example Detail":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: the rewritten function should include examples explained step by step how it goes from input to output"
+                "#Original Coding Question#:" + self.whole(item) + "\n"
+            )
+            cf = model(prompt)
 
-        elif dimension == "Parameter Content":
-            # Question
-            prompt = "Instruction: Rewrite the below original coding question based on the #rewrite requirement#.\n"
-            prompt += "#rewrite requirement#: Revise the definition and purpose of the input parameter in the function described in the #original coding question#. Additionally, update the function's docstring to accurately reflect the new meaning and role of the parameter.\n"
-            prompt += "Your output should be: [#Rewritten Coding Question#]\n"
-            prompt += f"#Original Coding Question#:{item.function_header}{item.docstring}{item.examples}\n"
-            prompt += "#Rewritten Coding Question#:\n"
-            output = model(prompt)
-            item.function_header = output
-            item.docstring = ""
-            item.examples = ""
-            item.answer = ""
+        return cf, answer, prompt
 
-        elif dimension == "Parameter Type":
-            # Question
-            prompt = "Instruction: Rewrite the below original coding question based on the #rewrite requirement#.\n"
-            prompt += "#rewrite requirement#: Keep the same requirement except changing the type of the parameter in #original coding question#. For example, you can change int to str\n"
-            prompt += "Your output should be: [#Rewritten Coding Question#]\n"
-            prompt += f"#Original Coding Question#:{item.function_header}{item.docstring}{item.examples}\n"
-            prompt += "#Rewritten Coding Question#:\n"
-            output = model(prompt)
-            item.function_header = output
-            item.docstring = ""
-            item.examples = ""
-            item.answer = ""
+    def human_eval_reasoning_adjustment(self, item, category, model):
+        prompt, answer = None, None
 
-        elif dimension == "Info Recombination":
-            # Question
-            prompt = "Instruction: Rewrite the below original coding question based on the #rewrite requirement#.\n"
-            prompt += "#rewrite requirement#: Merge the two #original coding question# into one super question that contains the elements of both questions. The super question do not need to contain every information provided in the two #original coding question#.\n"
-            prompt += "The rewritten coding question should contain the function header, the docstring with examples. Your output should be: [#Rewritten Coding Question#]\n"
-            prompt += f"#Original Coding Question 1#:{item.function_header}{item.docstring}{item.examples}\n"
-            prompt += '''#Original Coding Question 2#:
+        if category == "Restrict Requirement":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: Add a new further condition that modifies the coding requirement in #original coding question# that make the coding requirment harder\n"
+                "Your output should be: [#Rewritten Coding Question#]\n"
+                "#Original Coding Question#:" + self.whole(item) + "\n"
+                "#Rewritten Coding Question#:\n"
+            )
+            cf = model(prompt)
+
+        elif category == "Further Requirement":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: Add a further requirement on top of the achieved results in #original coding question#\n"
+                "Your output should be: [#Rewritten Coding Question#]\n"
+                "#Original Coding Question#:" + self.whole(item) + "\n"
+                "#Rewritten Coding Question#:\n"
+            )
+            cf = model(prompt)
+
+        elif category == "Parallel Requirement":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: Add a further requirement that can be achieved in parallel with the requirement in #original coding question#\n"
+                "Your output should be: [#Rewritten Coding Question#]\n"
+                "#Original Coding Question#:" + self.whole(item) + "\n"
+                "#Rewritten Coding Question#:\n"
+            )
+            cf = model(prompt)
+
+        elif category == "Change Docstring":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: Change the requirement in docstring in #original coding question# to require a related but different solution\n"
+                "Your output should be: [#Rewritten Coding Question#]\n"
+                "#Original Coding Question#:" + self.whole(item) + "\n"
+                "#Rewritten Coding Question#:\n"
+            )
+            cf = model(prompt)
+        elif category == "Info Recombination":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: Merge the two #original coding question# into one super question that contains the elements of both questions. The super question do not need to contain every information provided in the two #original coding question#.\n"
+                "The rewritten coding question should contain the function header, the docstring with examples. Your output should be: [#Rewritten Coding Question#]\n"
+                "#Original Coding Question1#:" + self.whole(item) + "\n"
+                '''#Original Coding Question 2#:
 
     def solution(lst):
         """Given a non-empty list of integers, return the sum of all of the odd elements that are in even positions.
@@ -1838,109 +1783,71 @@ class PerturbTemplateHumanEval(BaseModel):
         solution([30, 13, 24, 321]) ==>0
         """
     '''
-            prompt += "#Rewritten Coding Question#:\n"
+                "#Rewritten Coding Question#:\n"
+            )
 
-            output = model(prompt)
-            item.function_header = output
-            item.docstring = ""
-            item.examples = ""
-            item.answer = ""
-
-        elif dimension == "Variable Iteration":
+            cf = model(prompt)
+        elif category == "Code Import":
             # Question
-            prompt = "Instruction: Give only one specific input values that can feed to the program header below"
-            prompt += f"program:{item.function_header}{item.docstring}{item.examples}{item.answer}\n"
-            output = model(prompt)
             item.function_header = (
-                "The below program is fed with: "
-                + output
-                + " as input and feedback the function output to its input variable, and the function is executed for X number of times, what is the final output? (answer may have variable X included)"
-                + "\n"
+                "Implement the function below to take in batch input parameter and use the multicore cpu.\n"
                 + item.function_header
             )
-            item.examples = item.examples + item.answer
-            item.answer = ""
-
-        elif dimension == "Variable Substitution":
-            # Question
-            prompt = "Instruction: Rewrite the below original coding question based on the #rewrite requirement#.\n"
-            prompt += "#rewrite requirement#: Substitute one specific value in docstring as a input parameter to the function."
-            prompt += "Your output should be: [#Rewritten Coding Question#]\n"
-            prompt += f"#Original Coding Question#:{item.function_header}{item.docstring}{item.examples}\n"
-            prompt += "#Rewritten Coding Question#:\n"
-            output = model(prompt)
-            item.function_header = output
-            item.docstring = ""
-            item.examples = ""
-            item.answer = ""
-
-        elif dimension == "WhatIf Code":
-            # Question
-            prompt = "Instruction: Rewrite the below original coding question based on the #rewrite requirement#.\n"
-            prompt += "#rewrite requirement#: Make a small change to the function below. This change should slightly alter what the function does, but keep it mostly the same.\n"
-            prompt += "Your output should only contain the rewritten python code"
-            prompt += (
-                f"#Function#:{item.function_header}{item.docstring}{item.answer}\n"
+            cf = self.whole(item)
+        elif category == "Example Boundary":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: Change the demostration example in the function docstring to include special input and boundary cases:\n"
+                "#Original Coding Question1#:" + self.whole(item) + "\n"
             )
-            prompt += "#Rewritten Coding Question#:\n"
-            rewritten_code = model(prompt)
-            prompt = "Choose one example below and mask only one of the input value with variable in the example with masked_input. Please give me the example after masking\n"
-            prompt += f"#Examples#:{item.examples}\n"
-            prompt += "#Masked Example#:\n"
-            masked_example = model(prompt)
-
-            item.function_header = f"""If the output to the following function is \n{masked_example}\nFunction:\n
-    {item.function_header}{item.docstring}{item.answer}
-    What if the function is now changed to:
-    {rewritten_code}
-    What will be the output to the function?
-    """
-            item.docstring = ""
-            item.examples = ""
-            item.answer = ""
-
-        elif dimension == "Generalize Parameter":
-            # Question
-            prompt = "Instruction: Rewrite the below original coding question based on the #rewrite requirement#.\n"
-            prompt += "#rewrite requirement#: Generalize the input parameter class type by expanding to one or more python classes, for example string, dict and list, float. The requirement should also expand accordingly to achieve similar requirements for those expanded types\n"
-            prompt += "Your output should be: [#Rewritten Coding Question#]\n"
-            prompt += f"#Original Coding Question#:{item.function_header}{item.docstring}{item.examples}\n"
-            prompt += "#Rewritten Coding Question#:\n"
             output = model(prompt)
-            item.function_header = output
-            item.docstring = ""
-            item.examples = ""
-            item.answer = ""
-        elif dimension == "Higher Order":
-            # Question
-            prompt = "Instruction: Rewrite the below original coding question based on the #rewrite requirement#.\n"
-            prompt += "#rewrite requirement#: Identify a broader requirement that encompasses the specific coding problem presented below. \n"
-            prompt += "Your output should be: [#Rewritten Coding Requirement#]. You should describe the requirement using natural language. and give some examples to illustrate it\n"
-            prompt += f"#Original Coding Question#:{item.function_header}{item.docstring}{item.examples}\n"
-            prompt += "#Rewritten Coding Question#:\n"
-            output = model(prompt)
-            item.function_header = (
-                "Write a higher order function that can solve the problem: \n"
-                + output
-                + "\nBelow is a special case that can solve the above problem\n"
-                + item.function_header
+            cf = output
+            answer = item.answer
+        elif category == "Higher Order":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: create a generalized requirement that encompasses the coding requirement presented below. \n"
+                "#Original Coding Question#:" + self.whole(item) + "\n"
             )
-            item.examples = item.examples + item.answer
-            item.answer = ""
-        elif dimension == "Code Plan":
-            # Question
-            prompt = "Instruction: Rewrite the below original coding question based on the #rewrite requirement#.\n"
-            prompt += "#rewrite requirement#: The rewritten question should suggest a commented solution plan add add it at the back of original coding question, without giving implementation specified in the plan.\n"
-            prompt += "Your output should be: [#Rewritten Coding Question#]\n"
-            prompt += f"#Original Coding Question#:{item.function_header}{item.docstring}{item.examples}\n"
-            prompt += "#Rewritten Coding Question#:\n"
-            output = model(prompt)
-            item.function_header = item.function_header + "\n" + output
-            item.docstring = ""
-            item.examples = ""
-            item.answer = ""
-        elif dimension == "Code Execution":
-            # Question
+            cf = model(prompt)
+
+        return cf, answer, prompt
+
+    def human_eval_computation_adjustment(self, item, category, model):
+        prompt, answer = None, None
+
+        if category == "Generalize Parameter":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: Generalize the input parameter class type by expanding to one or more python classes, for example string, dict and list, float. The requirement should also expand accordingly to achieve similar requirements for those expanded types\n"
+                "Your output should be: [#Rewritten Coding Question#]\n"
+                "#Original Coding Question#:" + self.whole(item) + "\n"
+            )
+            cf = model(prompt)
+        elif category == "Parameter Content":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: Revise the definition and purpose of the input parameter in the function described in the #original coding question#. Additionally, update the function's docstring to accurately reflect the new meaning and role of the parameter.\n"
+                "Your output should be: [#Rewritten Coding Question#]\n"
+                "#Original Coding Question#:" + self.whole(item) + "\n"
+                "#Rewritten Coding Question#:\n"
+            )
+            cf = model(prompt)
+
+        elif category == "Variable Type":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: Keep the same requirement except changing the type of the parameter in #original coding question#. For example, you can change int to str\n"
+                "Your output should be: [#Rewritten Coding Question#]\n"
+                "#Original Coding Question#:" + self.whole(item) + "\n"
+                "#Rewritten Coding Question#:\n"
+            )
+            cf = model(prompt)
+        return cf, answer, prompt
+
+    def human_eval_symbolic_manipulation(self, item, category, model):
+        answer, prompt = None, None
+        if category == "Code Execution":
             prompt = "Instruction: Find only one set of values for the input parameters that can be used for the function below.\n"
             prompt += (
                 f"#Function#:{item.function_header}{item.docstring}{item.answer}\n"
@@ -1951,183 +1858,229 @@ class PerturbTemplateHumanEval(BaseModel):
                 f"Find the output of the following function, if the input is:{input_values}\n"
                 + item.function_header
             )
-            item.examples = ""
-            item.answer = ""
-        elif dimension == "RealWorld Usecase":
-            # Question
-            prompt = "Instruction: Rewrite the below original coding question based on the #rewrite requirement#.\n"
-            prompt += "#rewrite requirement#: The rewritten docstring should frame the function requirment in a real world scenario that uses this function. The rewritten function requirement may be different from the original requirement. You should also change the function name\n"
-            prompt += "Your output should only be: [#Rewritten Coding Docstring#]\n"
-            prompt += f"#Original Coding Question#:{item.function_header}{item.docstring}{item.examples}\n"
-            prompt += "#Rewritten Coding Question#:\n"
+            cf = self.whole(item)
+        elif category == "Parameter Relationship":
+            prompt = "Instruction: give one possible output for the function."
+            prompt += (
+                f"#Function#:{item.function_header}{item.docstring}{item.answer}\n"
+            )
             output = model(prompt)
-            item.function_header = output
-            item.docstring = ""
-            item.examples = ""
-            item.answer = ""
+            cf = (
+                "If the output for the below function is "
+                + output
+                + "What are possible relations between the input parameters\nFunction:"
+                + self.whole(item)
+                + item.answer
+            )
 
-        elif dimension == "Compare Efficiency":
-            # Question
-            prompt = "Instruction: Rewrite the below original coding question based on the #rewrite requirement#.\n"
-            prompt += "#rewrite requirement#: write the code below to a more efficient or inefficient version with the same functionality. (choose one)\n"
-            prompt += "Your output should only be: [#Rewritten Coding Question#]\n"
-            prompt += f"#Original Coding Question#:{item.function_header}{item.docstring}{item.answer}\n"
-            output = model(prompt)
-            item.function_header = (
-                f"Which function below is more efficient:?\nCode 1:\n{output}\nCode 2:\n"
-                + item.function_header
+        elif category == "Variable Substitution":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: Substitute one specific value in docstring as a input parameter to the function."
+                "Your output should be: [#Rewritten Coding Question#]\n"
+                "#Original Coding Question#:" + self.whole(item) + "\n"
+                "#Rewritten Coding Question#:\n"
             )
-            item.examples = item.examples + item.answer
-            item.answer = ""
+            cf = model(prompt)
+        elif category == "Reverse Engineering":
+            prompt = "Instruction: write a function requirement that reverse engineer the given function.\n"
+            prompt += (
+                f"{item.function_header}{item.docstring}{item.examples}{item.answer}\n"
+            )
+            cf = prompt
 
-        elif dimension == "Time Complexity":
-            # Question
-            item.function_header = (
-                "Analyze the complexity regarding to each input parameter of the following function:\n"
-                + item.function_header
+        elif category == "WhatIf Code":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: Make a small change to the function below. This change should slightly alter what the function does, but keep it mostly the same.\n"
+                "Your output should only contain the rewritten python code"
+                f"#Function#:{item.function_header}{item.docstring}{item.answer}\n"
+                "#Rewritten Coding Question#:\n"
             )
-            item.examples = item.examples + item.answer
-            item.answer = ""
-
-        elif dimension == "Space Complexity":
-            # Question
-            item.function_header = (
-                "Analyze the space complexity regarding to each input parameter of the following function:\n"
-                + item.function_header
-            )
-            item.examples = item.examples + item.answer
-            item.answer = ""
-        elif dimension == "Parameter Categorization":
-            # Question
-            item.function_header = (
-                "Categorize the input parameters of the following function into groups, and give a representation of each group\n"
-                + item.function_header
-            )
-            item.examples = item.examples + item.answer
-            item.answer = ""
-        elif dimension == "Output Categorization":
-            # Question
-            item.function_header = (
-                "Categorize the potential output of the following function into groups\n"
-                + item.function_header
-            )
-            item.examples = item.examples + item.answer
-            item.answer = ""
-        elif dimension == "Test Case":
-            # Question
-            item.function_header = (
-                "Write test cases that can test for the following function\n"
-                + item.function_header
-            )
-            item.answer = ""
-
-        elif dimension == "Guess Input":
-            # Question
+            rewritten_code = model(prompt)
+            prompt = "Choose one example below and mask only one of the input value with variable in the example with masked_input. Please give me the example after masking\n"
+            prompt += f"#Examples#:{item.examples}\n"
+            prompt += "#Masked Example#:\n"
+            masked_example = model(prompt)
+            cf = f"""If the output to the following function is \n{masked_example}\nFunction:\n
+    {item.function_header}{item.docstring}{item.answer}
+    What if the function is now changed to:
+    {rewritten_code}
+    What will be the output to the function?
+    """
+        elif category == "Solve Input":
             prompt = f"Give only one possible output for the following function\n{item.function_header}{item.docstring}{item.answer}\n"
             prompt += "You should only give output, and should not give input\n"
             prompt += "[#Possible Output#]:\n"
             possible_output = model(prompt)
-            item.function_header = (
+            cf = (
                 "What are possible input to the following function, if the output is:\n"
                 + possible_output
                 + "\n"
                 + item.function_header
+                + item.answer
             )
-            item.examples = item.answer
-            item.answer = ""
-
-        elif dimension == "Code Import":
-            # Question
+        elif category == "Variable Range":
+            prompt = "Instruction: Identify the range of values that the input parameters can take for the function below.\n"
+            cf = None
+            prompt += (
+                f"#Function#:{item.function_header}{item.docstring}{item.answer}\n"
+            )
+            prompt += "#Input Range#:\n"
+            input_range = model(prompt)
             item.function_header = (
-                "Rewrite the function below to take in batch input parameter and use the multicore cpu.\n"
+                f"Find the output of the following function, if the input is within the range:{input_range}\n"
+                + item.function_header
+            )
+            cf = self.whole(item)
+
+        return cf, answer, prompt
+
+    def human_eval_question_understanding(self, item, category, model):
+        answer, prompt = None, None
+
+        if category == "Test Case":
+            item.function_header = (
+                "Write test cases that can test for the following function\n"
+                + item.function_header
+            )
+            cf = self.whole(item)
+
+        elif category == "Incomplete Answer":
+
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: You should give an code solution to the #original coding question# with some lines of the code missing"
+                "#Original Coding Question#:" + self.whole(item) + "\n"
+            )
+            cf = (
+                "Instruction: Fulfill the missing code in the following function\n"
+                + model(prompt)
+            )
+
+        elif category == "Question Formulation":
+            item.function_header = (
+                "Write a code description for the following code and provide one use case\n"
+                + item.function_header
+            )
+            item.docstring = ""
+            item.examples = item.answer
+            cf = self.whole(item)
+
+        elif category == "Introduce Bias":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: replace the examples in the docstring to take in only certain kind of input. \n"
+                "#Original Coding Question#:" + self.whole(item) + "\n"
+            )
+            cf = model(prompt)
+
+        return cf, answer, prompt
+
+    def human_eval_solution_evaluation(self, item, category, model):
+        answer, prompt = None, None
+        if category == "Reduce Complexity":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: answer the coding question below with unnecessary complexity \n"
+                "#Original Coding Question#:" + self.whole(item) + "\n"
+            )
+            output = model(prompt)
+            item.function_header = (
+                f"Reduce the complexity of the following function\n"
+                + item.function_header
+            )
+            item.examples = item.examples + "\n" + output
+            cf = self.whole(item)
+        elif category == "Step Necessity":
+
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: Pick a line from the code and check what is the functionality of that particular line. \n"
+                "#Original Coding Question#:" + self.whole(item) + item.answer + "\n"
+            )
+            cf = model(prompt)
+
+        elif category == "Theoretical Basis":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: Identify the underlying key coding concepts to the answer the following function\n"
+                "#Original Coding Question#:" + self.whole(item) + "\n"
+            )
+            cf = model(prompt)
+        elif category == "Code Complexity":
+            item.function_header = (
+                "Analyze the time complexity and space complexity regarding to each input parameter of the following function:\n"
                 + item.function_header
             )
             item.examples = item.examples + item.answer
-            item.answer = ""
-        elif dimension == "No ForLoop":
-            # Question
-            item.function_header = (
-                "Instruction: Answer the coding function below without using for loop\n"
-                + item.function_header
-            )
-            item.answer = ""
-        elif dimension == "X Language":
-            # Question
-            language = random.choice(["python2", "c++", "java", "javascript", "go"])
-            prompt = f"Rewrite the function header below in {language} (you do not need to answer it)\n"
-            prompt += f"{item.function_header}{item.docstring}{item.examples}\n"
-            output = model(prompt)
-            item.function_header = (
-                f"Answer the coding question below in {language}\n" + output
-            )
-            item.docstring = ""
-            item.examples = ""
-            item.answer = ""
-        elif dimension == "Simple Name":
-            # Question
-            item.function_header = (
-                "Answer the coding question below and only use 6 letter word for each variable names inside the solution\n"
-                + item.function_header
-            )
-            item.answer = ""
-        elif dimension == "Alternative Question":
-            # Question
-            item.function_header = (
-                "Rewrite the function description to a completely different one without changing its functionality\n"
-                + item.function_header
-            )
-            item.answer = ""
-        elif dimension == "Alternative Answer":
-            # Question
-            item.function_header = (
-                "Find an alternative solution for the following coding question\n"
-                + item.function_header
-            )
-            item.examples = item.examples + "Solution:\n" + item.answer.strip()
-            item.answer = ""
-        elif dimension == "Question Formulation":
-            # Question
-            item.function_header = "Write a code description for the following code and provide one use case\n"
+            cf = self.whole(item)
 
-            item.docstring = ""
-            item.examples = item.answer
-            item.answer = ""
-        elif dimension == "Backward Function":
-            # Question
-            prompt = "Describe a function requirement that reverse engineer the given function, you should also together give docstring and function header\n"
-            prompt += (
-                f"{item.function_header}{item.docstring}{item.examples}{item.answer}\n"
+        return cf, answer, prompt
+
+    def human_eval_error_debugging(self, item, category, model):
+        answer, prompt = None, None
+        if category == "Example Requirement":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: The rewritten function should 1) include examples explained step by step how it goes from input to output. "
+                "2) It should delete the original function requirement in the docstring\n"
+                "#Original Coding Question#:" + self.whole(item) + "\n"
             )
-            new_requirement = model(prompt)
-            item.function_header = new_requirement
-            item.docstring = ""
-            item.examples = ""
-            item.answer = ""
-        elif dimension == "Parameter Sequence":
+            cf = model(prompt)
+        if category == "Incomplete Requirement":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: The rewritten function should remove one piece of information from the docstring to make it incomplete\n"
+                "#Original Coding Question#:" + self.whole(item) + "\n"
+            )
+            cf = model(prompt)
+        if category == "Wrong Example":
             # Question
-            prompt = "Instruction: Change the input parameter sequence of the function header below then Change the input parameter name and function name to wired names of the function header below"
-            prompt += f"#Function Header#:{item.function_header}{item.docstring}{item.examples}\n"
+            prompt = (
+                self.instruct
+                + "Rewrite the function below to use a misleading example as demonstration\n"
+                "#Original Coding Question#:" + self.whole(item) + "\n"
+            )
+            cf = model(prompt)
+        elif category == "Runtime Error":
+            prompt = "Introduce a Python Runtime Error to the following function that is hard to notice and debug. You should not add any new lines of code\n"
+            prompt += f"#Function#:{item.function_header}{item.docstring}{item.examples}{item.answer}\n"
+            wrong_code = model(prompt)
+            cf = "Debug the error in the following code\n" + wrong_code
+        elif category == "Logical Error":
+            prompt = "Introduce a Python Value Error to the following function that is hard to notice and debug. You should not add any new lines of code\n"
+            prompt += f"#Function#:{item.function_header}{item.docstring}{item.examples}{item.answer}\n"
+            wrong_code = model(prompt)
+            cf = "Debug the error in the following code\n" + wrong_code
+        return cf, answer, prompt
+
+    def human_eval_alternative_format(self, item, category, model):
+        answer, prompt = None, None
+        if category == "Realworld Usecase":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: The rewritten docstring should frame the function requirment in a real world scenario that uses this function. The rewritten function requirement may be different from the original requirement. You should also change the function name\n"
+                "Your output should only be: [#Rewritten Coding Docstring#]\n"
+                "#Original Coding Question#:" + self.whole(item) + "\n"
+                "#Rewritten Coding Question#:\n"
+            )
+            cf = model(prompt)
+        elif category == "Parameter Sequence":
+            prompt = (
+                "Instruction: Change the input parameter sequence of the function header below then Change the input parameter name and function name to wired names of the function header below"
+                "#Original Coding Question#:" + self.whole(item) + "\n"
+            )
             output = model(prompt)
-            item.function_header = output
-            item.docstring = ""
-            item.examples = ""
-            item.answer = ""
-        elif dimension == "Incomplete Answer":
-            # Question
-            item.function_header = (
-                "Fulfill the coding question below\n" + item.function_header
-            )
-            item.examples = item.examples + item.answer.strip()[:10]
-            item.answer = ""
-        elif dimension == "True False":
-            # Question
+            cf = output
+        elif category == "True False":
             if random.choice([True, False]):
                 item.function_header = (
                     "Evaluate whether the solution below is the correct solution for the coding question, True or False?\nCoding Question:\n"
                     + item.function_header
                 )
                 item.examples = item.examples + "Solution:\n" + item.answer
-                item.answer = "True"
+                answer = "True"
             else:
                 prompt = "Generate a wrong and misleading solution for the following coding question\nCoding Question:\n"
                 prompt += (
@@ -2139,91 +2092,83 @@ class PerturbTemplateHumanEval(BaseModel):
                     + item.function_header
                 )
                 item.examples = item.examples + "Solution:\n" + output
-                item.answer = "False"
-        elif dimension == "One Example":
-            # Question
+                answer = "False"
+            cf = self.whole(item)
+        elif category == "Complex Docstring":
             prompt = (
-                "Rewrite the function below to only take one example as demonstration. You do not need to complete the function.\n"
-                + item.function_header
-                + item.docstring
-                + item.examples
+                self.instruct
+                + "#rewrite requirement#: The rewritten docstring should make the original function requirement unnecessarily complicated.\n"
+                "#Original Coding Question#:" + self.whole(item) + "\n"
             )
-            output = model(prompt)
-            item.function_header = output
-            item.docstring = ""
-            item.examples = ""
-            item.answer = item.answer
-        elif dimension == "Wrong Example":
-            # Question
-            prompt = (
-                "Rewrite the function below to use a misleading example as demonstration\n"
-                + item.function_header
-                + item.docstring
-                + item.examples
-            )
-            output = model(prompt)
-            item.function_header = output
-            item.docstring = ""
-            item.examples = ""
-            item.answer = "no correct answer"
-        elif dimension == "Syntax Error":
-            prompt = "Introduce a Syntax Error to the following function that is hard to notice and debug. You should not add any new lines of code\n"
-            prompt += f"#Function Header#:{item.function_header}{item.docstring}{item.examples}{item.answer}\n"
-            wrong_code = model(prompt)
-            item.function_header = (
-                "Debug the error in the following code\n" + wrong_code
-            )
-            item.docstring = ""
-            item.examples = ""
-            item.answer = ""
-        elif dimension == "Logical Error":
-            prompt = "Introduce a Logical Error to the following function that is hard to notice and debug. You should not add any new lines of code\n"
-            prompt += f"#Function Header#:{item.function_header}{item.docstring}{item.examples}{item.answer}\n"
-            wrong_code = model(prompt)
-            item.function_header = (
-                "Debug the error in the following code\n" + wrong_code
-            )
-            item.docstring = ""
-            item.examples = ""
-            item.answer = ""
-        elif dimension == "Runtime Error":
-            prompt = "Introduce a Runtime Error to the following function that is hard to notice and debug. You should not add any new lines of code\n"
-            prompt += f"#Function Header#:{item.function_header}{item.docstring}{item.examples}{item.answer}\n"
-            wrong_code = model(prompt)
-            item.function_header = (
-                "Debug the error in the following code\n" + wrong_code
-            )
-            item.docstring = ""
-            item.examples = ""
-            item.answer = ""
-        elif dimension == "Example Count":
-            prompt = "Add ten more correct demonstrations examples in the function docstring:\n"
-            prompt += f"{item.function_header}{item.docstring}{item.examples}\n"
-            prompt += "You should only output examples"
-            output = model(prompt)
-            item.examples = output
-            item.answer = item.answer
-        elif dimension == "Example Complex":
-            prompt = "Change the input parameter of example in the function docstring to be a lot more complex:\n"
-            prompt += f"{item.function_header}{item.docstring}{item.examples}\n"
-            output = model(prompt)
-            item.function_header = output
-            item.docstring = ""
-            item.examples = ""
-            item.answer = item.answer
-        elif dimension == "Example Boundary":
-            prompt = "Change the demostration example in the function docstring to include special input and boundary cases:\n"
-            prompt += f"{item.function_header}{item.docstring}{item.examples}\n"
-            output = model(prompt)
-            item.function_header = output
-            item.docstring = ""
-            item.examples = ""
-            item.answer = item.answer
-        else:
-            print(dimension, " Not Implemented")
-            pass
+            cf = model(prompt)
+        return cf, answer, prompt
 
-        return item
+    def human_eval_pairwise_comparison(self, item, category, model):
+        if category == "Identical Code":
+            prompt = (
+                self.instruct
+                + "#rewrite requirement#: Give two implementations of the following function requirement and check if the two implementations are identical\n"
+                "#Original Coding Question#:" + self.whole(item) + "\n"
+            )
+            cf = model(prompt)
+        return cf, None, None
+
+    def human_eval_answer_constraint(self, item, category, model):
+
+        answer, prompt = None, None
+        if category == "No Keyword":
+            cf = (
+                "Instruction: Answer the coding function below without using python keyword 'for'\n"
+                + self.whole(item)
+            )
+        elif category == "X Language":
+            language = random.choice(["python2", "c++", "java", "javascript", "go"])
+            prompt = f"Rewrite the function header below in {language} (you do not need to answer it)\n"
+            prompt += self.whole(item)
+            output = model(prompt)
+            cf = f"Answer the coding question below in {language}\n" + output
+
+        elif category == "Alternative Answer":
+            item.function_header = (
+                "Find an alternative solution for the following coding question\n"
+                + item.function_header
+            )
+            item.examples = item.examples + "Solution:\n" + item.answer.strip()
+            cf = self.whole(item)
+
+        elif category == "Simple Name":
+            number = random.choice(["2", "3", "4", "5", "6"])
+            item.function_header = (
+                f"Answer the coding question below and only use {number} letter word for each variable names inside the solution\n"
+                + item.function_header
+            )
+            cf = self.whole(item)
+        return cf, answer, prompt
+
+    def __call__(self, dimension, item, category, model):
+        if dimension == "Question Simplification":
+            method = self.human_eval_question_simplification
+        elif dimension == "Reasoning Adjustment":
+            method = self.human_eval_reasoning_adjustment
+        elif dimension == "Computation Adjustment":
+            method = self.human_eval_computation_adjustment
+        elif dimension == "Symbolic Manipulation":
+            method = self.human_eval_symbolic_manipulation
+        elif dimension == "Question Understanding":
+            method = self.human_eval_question_understanding
+        elif dimension == "Solution Evaluation":
+            method = self.human_eval_solution_evaluation
+        elif dimension == "Error Debugging":
+            method = self.human_eval_error_debugging
+        elif dimension == "Alternative Format":
+            method = self.human_eval_alternative_format
+        elif dimension == "Pairwise Comparison":
+            method = self.human_eval_pairwise_comparison
+        elif dimension == "Answer Constraint":
+            method = self.human_eval_answer_constraint
+        else:
+            raise ValueError(f"dimension {dimension} is not supported")
+        return method(item, category, model)
 
 
 if __name__ == "__main__":

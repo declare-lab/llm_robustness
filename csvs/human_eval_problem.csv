@@ -1,0 +1,3647 @@
+category,original_question,original_answer,perturbed_question,refined_perturbed_q,prompt
+Remove Constraint,"def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+","Answer:
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+","#New Coding Question#: def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid sequence of brackets.
+    """"""
+
+    """"""
+    is_nested('[]') ➞ True
+    is_nested('][') ➞ False
+    is_nested('[][]') ➞ True
+    is_nested('[][') ➞ False
+    is_nested('[[]]') ➞ True
+    is_nested('[]]') ➞ False
+    """"""","#perturbed question#: def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if the sequence of brackets is valid.
+    """"""
+
+    """"""
+    is_nested('[]') ➞ True
+    is_nested('][') ➞ False
+    is_nested('[][]') ➞ True
+    is_nested('[][') ➞ False
+    is_nested('[[]]') ➞ True
+    is_nested('[]]') ➞ False
+    """"""","Instruction: Create a new question following the #rewrite requirement# based on original question. You should analyze the #rewrite requirement# and #original coding question# first in a step by step manner first before create the new math question, as the requirement is complicated.
+#rewrite requirement#: Make the requirement in #original coding question# easier.
+#Original Coding Question#:def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+"
+Helper Function,"def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+","Answer:
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+","Use the helper function above to achieve the requirement
+def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+#Rewritten Coding Question#: 
+
+Create a helper function named 'is_balanced' that takes a string as input which contains only square brackets. This function should return True if and only if the brackets in the string are balanced. This helper function will assist in achieving the requirement in the original function 'is_nested' which checks if there is a valid subsequence of brackets where at least one bracket in the subsequence is nested.
+
+""""""
+is_balanced('[]') ➞ True
+is_balanced('[][]') ➞ True
+is_balanced('[[]]') ➞ True
+is_balanced('[]]]]]]][[[[[]') ➞ False
+is_balanced('[[]][[') ➞ False
+""""""","Create a helper function named 'is_balanced' that takes a string as input which contains only square brackets. This function should return True if and only if the brackets in the string are balanced. This helper function will assist in achieving the requirement in the original function 'is_nested' which checks if there is a valid subsequence of brackets where at least one bracket in the subsequence is nested.
+
+""""""
+is_balanced('[]') ➞ True
+is_balanced('[][]') ➞ True
+is_balanced('[[]]') ➞ True
+is_balanced('[]]]]]]][[[[[]') ➞ False
+is_balanced('[[]][[') ➞ False
+""""""","Instruction: Create a new question following the #rewrite requirement# based on original question. You should analyze the #rewrite requirement# and #original coding question# first in a step by step manner first before create the new math question, as the requirement is complicated.
+#rewrite requirement#: Add a helper function that can help to partially achieve the requirement in #original coding question#. You do not need to answer the question
+#Original Coding Question#:def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+"
+Solution Plan,"def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+","Answer:
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+","def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    
+    Solution Plan:
+    1. Initialize a counter to 0.
+    2. Iterate over the string.
+    3. If the character is an opening bracket, increment the counter.
+    4. If the character is a closing bracket, decrement the counter.
+    5. If the counter is negative at any point, return False as it means there is a closing bracket without a matching opening bracket.
+    6. If the counter is 0 at the end, return False as it means there are no nested brackets.
+    7. If the counter is positive at the end, return True as it means there are nested brackets.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""","#perturbed question#: def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    
+    Solution Plan:
+    1. Initialize a counter to 0.
+    2. Iterate over the string.
+    3. If the character is an opening bracket, increment the counter.
+    4. If the character is a closing bracket, decrement the counter.
+    5. If the counter is negative at any point, return False as it means there is a closing bracket without a matching opening bracket.
+    6. If the counter is 0 at the end, return False as it means there are no nested brackets.
+    7. If the counter is positive at the end, return True as it means there are nested brackets.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""","Instruction: Create a new question following the #rewrite requirement# based on original question. You should analyze the #rewrite requirement# and #original coding question# first in a step by step manner first before create the new math question, as the requirement is complicated.
+#rewrite requirement#: The rewritten question should suggest a commented solution plan add add it at the back of original coding question, without giving implementation specified in the plan.
+Your output should be: [#Rewritten Coding Question#]
+#Original Coding Question#:def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+#Rewritten Coding Question#:
+"
+Example Detail,"def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+","Answer:
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+","#Rewritten Coding Question#:
+
+Create a function named 'is_nested' that accepts a string as an argument. This string should only contain square brackets. The function should return True if there is a valid sequence of brackets where at least one bracket in the sequence is nested. Otherwise, it should return False. 
+
+Here are some examples to illustrate how the function works:
+
+1. For the input '[[]]', the function should return True. This is because there is a valid sequence of brackets and there is at least one bracket that is nested within another bracket.
+
+2. For the input '[]]]]]]][[[[[]', the function should return False. This is because although there are brackets in the string, none of them are nested within another bracket.
+
+3. For the input '[][]', the function should return False. This is because there are brackets in the string, but none of them are nested within another bracket.
+
+4. For the input '[]', the function should return False. This is because there is only one pair of brackets and it is not nested within another bracket.
+
+5. For the input '[[][]]', the function should return True. This is because there is a valid sequence of brackets and there is at least one bracket that is nested within another bracket.
+
+6. For the input '[[]][[', the function should return True. This is because there is a valid sequence of brackets and there is at least one bracket that is nested within another bracket.","Create a function named 'is_nested' that takes a string as an argument. This string should only contain square brackets. The function should return True if there is a valid sequence of brackets where at least one bracket in the sequence is nested. Otherwise, it should return False. 
+
+Here are some examples to illustrate how the function works:
+
+1. For the input '[[]]', the function should return True. This is because there is a valid sequence of brackets and there is at least one bracket that is nested within another bracket.
+
+2. For the input '[]]]]]]][[[[[]', the function should return False. This is because although there are brackets in the string, none of them are nested within another bracket.
+
+3. For the input '[][]', the function should return False. This is because there are brackets in the string, but none of them are nested within another bracket.
+
+4. For the input '[]', the function should return False. This is because there is only one pair of brackets and it is not nested within another bracket.
+
+5. For the input '[[][]]', the function should return True. This is because there is a valid sequence of brackets and there is at least one bracket that is nested within another bracket.
+
+6. For the input '[[]][[', the function should return True. This is because there is a valid sequence of brackets and there is at least one bracket that is nested within another bracket.","Instruction: Create a new question following the #rewrite requirement# based on original question. You should analyze the #rewrite requirement# and #original coding question# first in a step by step manner first before create the new math question, as the requirement is complicated.
+#rewrite requirement#: the rewritten function should include examples explained step by step how it goes from input to output#Original Coding Question#:def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+"
+Restrict Requirement,"def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+","Answer:
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+","def is_nested(string, min_nested):
+    """"""
+    Create a function that takes a string and an integer as input. The string contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least 'min_nested' brackets in the subsequence are nested.
+    """"""
+
+    """"""
+    is_nested('[[]]', 2) ➞ True
+    is_nested('[]]]]]]][[[[[]', 3) ➞ False
+    is_nested('[][]', 1) ➞ False
+    is_nested('[]', 1) ➞ False
+    is_nested('[[][]]', 2) ➞ True
+    is_nested('[[]][[', 3) ➞ True
+    """"""","#perturbed question#: def is_nested(string, min_nested):
+    """"""
+    Construct a function that accepts a string and an integer as input. The string should only contain square brackets.
+    The function should return True only if there is a valid subsequence of brackets 
+    where at least 'min_nested' brackets in the subsequence are nested.
+    """"""
+
+    """"""
+    is_nested('[[]]', 2) ➞ True
+    is_nested('[]]]]]]][[[[[]', 3) ➞ False
+    is_nested('[][]', 1) ➞ False
+    is_nested('[]', 1) ➞ False
+    is_nested('[[][]]', 2) ➞ True
+    is_nested('[[]][[', 3) ➞ True
+    """"""","Instruction: Create a new question following the #rewrite requirement# based on original question. You should analyze the #rewrite requirement# and #original coding question# first in a step by step manner first before create the new math question, as the requirement is complicated.
+#rewrite requirement#: Add a new further condition that modifies the coding requirement in #original coding question# that make the coding requirment harder
+Your output should be: [#Rewritten Coding Question#]
+#Original Coding Question#:def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+#Rewritten Coding Question#:
+"
+Further Requirement,"def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+","Answer:
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+","def is_nested_and_balanced(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested and all brackets are balanced.
+    """"""
+
+    """"""
+    is_nested_and_balanced('[[]]') ➞ True
+    is_nested_and_balanced('[]]]]]]][[[[[]') ➞ False
+    is_nested_and_balanced('[][]') ➞ False
+    is_nested_and_balanced('[]') ➞ False
+    is_nested_and_balanced('[[][]]') ➞ True
+    is_nested_and_balanced('[[]][[') ➞ False
+    """"""","#perturbed question#: def is_nested_and_balanced(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested and all brackets are balanced.
+    """"""
+
+    """"""
+    is_nested_and_balanced('[[]]') ➞ True
+    is_nested_and_balanced('[]]]]]]][[[[[]') ➞ False
+    is_nested_and_balanced('[][]') ➞ False
+    is_nested_and_balanced('[]') ➞ False
+    is_nested_and_balanced('[[][]]') ➞ True
+    is_nested_and_balanced('[[]][[') ➞ False
+    """"""","Instruction: Create a new question following the #rewrite requirement# based on original question. You should analyze the #rewrite requirement# and #original coding question# first in a step by step manner first before create the new math question, as the requirement is complicated.
+#rewrite requirement#: Add a further requirement on top of the achieved results in #original coding question#
+Your output should be: [#Rewritten Coding Question#]
+#Original Coding Question#:def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+#Rewritten Coding Question#:
+"
+Parallel Requirement,"def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+","Answer:
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+","def is_nested_and_balanced(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested and all brackets are balanced.
+    """"""
+
+    """"""
+    is_nested_and_balanced('[[]]') ➞ True
+    is_nested_and_balanced('[]]]]]]][[[[[]') ➞ False
+    is_nested_and_balanced('[][]') ➞ False
+    is_nested_and_balanced('[]') ➞ False
+    is_nested_and_balanced('[[][]]') ➞ True
+    is_nested_and_balanced('[[]][[') ➞ False
+    """"""","#perturbed question#: def is_nested_and_balanced(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested and all brackets are balanced.
+    """"""
+
+    """"""
+    is_nested_and_balanced('[[]]') ➞ True
+    is_nested_and_balanced('[]]]]]]][[[[[]') ➞ False
+    is_nested_and_balanced('[][]') ➞ False
+    is_nested_and_balanced('[]') ➞ False
+    is_nested_and_balanced('[[][]]') ➞ True
+    is_nested_and_balanced('[[]][[') ➞ False
+    """"""","Instruction: Create a new question following the #rewrite requirement# based on original question. You should analyze the #rewrite requirement# and #original coding question# first in a step by step manner first before create the new math question, as the requirement is complicated.
+#rewrite requirement#: Add a further requirement that can be achieved in parallel with the requirement in #original coding question#
+Your output should be: [#Rewritten Coding Question#]
+#Original Coding Question#:def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+#Rewritten Coding Question#:
+"
+Change Docstring,"def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+","Answer:
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+","def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid sequence of brackets 
+    where every bracket in the sequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ False
+    """"""","#perturbed question#: def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid sequence of brackets 
+    where every bracket in the sequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ False
+    is_nested('[[]][[') ➞ False
+    """"""","Instruction: Create a new question following the #rewrite requirement# based on original question. You should analyze the #rewrite requirement# and #original coding question# first in a step by step manner first before create the new math question, as the requirement is complicated.
+#rewrite requirement#: Change the requirement in docstring in #original coding question# to require a related but different solution
+Your output should be: [#Rewritten Coding Question#]
+#Original Coding Question#:def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+#Rewritten Coding Question#:
+"
+Info Recombination,"def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+","Answer:
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+","def super_solution(string, lst):
+    """"""
+    Create a function that takes a string and a list as inputs. The string contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested. 
+    The function should also return the sum of all of the odd elements that are in even positions in the list.
+
+    Examples
+    super_solution('[[]]', [5, 8, 7, 1]) ➞ (True, 12)
+    super_solution('[]]]]]]][[[[[]', [3, 3, 3, 3, 3]) ➞ (False, 9)
+    super_solution('[][]', [30, 13, 24, 321]) ➞ (False, 0)
+    super_solution('[]', [5, 8, 7, 1]) ➞ (False, 12)
+    super_solution('[[][]]', [3, 3, 3, 3, 3]) ➞ (True, 9)
+    super_solution('[[]][[', [30, 13, 24, 321]) ➞ (True, 0)
+    """"""","#perturbed question#: def super_solution(string, lst):
+    """"""
+    Create a function that takes a string and a list as inputs. The string contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested. 
+    The function should also return the sum of all of the odd elements that are in even positions in the list.
+
+    Examples
+    super_solution('[[]]', [5, 8, 7, 1]) ➞ (True, 12)
+    super_solution('[]]]]]]][[[[[]', [3, 3, 3, 3, 3]) ➞ (False, 9)
+    super_solution('[][]', [30, 13, 24, 321]) ➞ (False, 0)
+    super_solution('[]', [5, 8, 7, 1]) ➞ (False, 12)
+    super_solution('[[][]]', [3, 3, 3, 3, 3]) ➞ (True, 9)
+    super_solution('[[]][[', [30, 13, 24, 321]) ➞ (True, 0)
+    """"""","Instruction: Create a new question following the #rewrite requirement# based on original question. You should analyze the #rewrite requirement# and #original coding question# first in a step by step manner first before create the new math question, as the requirement is complicated.
+#rewrite requirement#: Merge the two #original coding question# into one super question that contains the elements of both questions. The super question do not need to contain every information provided in the two #original coding question#.
+The rewritten coding question should contain the function header, the docstring with examples. Your output should be: [#Rewritten Coding Question#]
+#Original Coding Question1#:def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+#Original Coding Question 2#:
+
+    def solution(lst):
+        """"""Given a non-empty list of integers, return the sum of all of the odd elements that are in even positions.
+
+
+        Examples
+        solution([5, 8, 7, 1]) ==> 12
+        solution([3, 3, 3, 3, 3]) ==> 9
+        solution([30, 13, 24, 321]) ==>0
+        """"""
+    #Rewritten Coding Question#:
+"
+Code Import,"def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+","Answer:
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+","Implement the function below to take in batch input parameter and use the multicore cpu.
+def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+","#perturbed question#: def super_solution(string, lst):
+    """"""
+    Create a function that takes a string and a list as inputs. The string contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested. 
+    The function should also return the sum of all of the odd elements that are in even positions in the list.
+
+    Examples
+    super_solution('[[]]', [5, 8, 7, 1]) ➞ (True, 12)
+    super_solution('[]]]]]]][[[[[]', [3, 3, 3, 3, 3]) ➞ (False, 9)
+    super_solution('[][]', [30, 13, 24, 321]) ➞ (False, 0)
+    super_solution('[]', [5, 8, 7, 1]) ➞ (False, 12)
+    super_solution('[[][]]', [3, 3, 3, 3, 3]) ➞ (True, 9)
+    super_solution('[[]][[', [30, 13, 24, 321]) ➞ (True, 0)
+    """"""",
+Example Boundary,"def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+","Answer:
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+","#Rewritten Coding Question1#:def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('') ➞ False
+    is_nested('[') ➞ False
+    is_nested(']') ➞ False
+    is_nested('][') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[[[]]]]') ➞ True
+    is_nested('[[[]]]') ➞ True
+    is_nested('[[[[]]]]') ➞ True
+    is_nested('[[[]]]') ➞ True
+    is_nested('[[[]]]') ➞ True
+    is_nested('[[[]]]') ➞ True
+    """"""","#perturbed question#: def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('') ➞ False
+    is_nested('[') ➞ False
+    is_nested(']') ➞ False
+    is_nested('][') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[[[]]]]') ➞ True
+    is_nested('[[[]]]') ➞ True
+    """"""
+","Instruction: Create a new question following the #rewrite requirement# based on original question. You should analyze the #rewrite requirement# and #original coding question# first in a step by step manner first before create the new math question, as the requirement is complicated.
+#rewrite requirement#: Change the demostration example in the function docstring to include special input and boundary cases:
+#Original Coding Question1#:def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+"
+Higher Order,"def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+","Answer:
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+","#Generalized Requirement#: Create a function that accepts a string of only a specific set of characters. The function should return a positive response if and only if there is a valid sequence of these characters where at least one character in the sequence is nested within another. 
+
+#New Math Question#: Create a function that takes a string of only parentheses as input. The function should return True if and only if there is a valid sequence of parentheses where at least one parenthesis in the sequence is nested within another. For example, the function should return True for '((()))' and '()()()', but False for '()'.","#perturbed question#: Create a function that accepts a string of only parentheses. The function should return True if and only if there is a valid sequence of parentheses where at least one parenthesis in the sequence is nested within another. For instance, the function should return True for '((()))' and '(()())', but False for '()'.","Instruction: Create a new question following the #rewrite requirement# based on original question. You should analyze the #rewrite requirement# and #original coding question# first in a step by step manner first before create the new math question, as the requirement is complicated.
+#rewrite requirement#: create a generalized requirement that encompasses the coding requirement presented below. 
+#Original Coding Question#:def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+"
+Generalize Parameter,"def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+","Answer:
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+","#Rewritten Coding Question#:
+def is_nested(input):
+    """"""
+    Create a function that takes a string, list, dictionary or float as input. 
+    If the input is a string, it should contain only square brackets.
+    If the input is a list or dictionary, it should contain only square brackets as elements or keys/values.
+    If the input is a float, it should be converted to a string with square brackets replacing the decimal point and zeros.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    is_nested(['[[]]', '[]']) ➞ True
+    is_nested({'[[]]': '[]', '[][]': '[]'}) ➞ True
+    is_nested(1.0) ➞ False
+    is_nested(1.01) ➞ True
+    """"""","#perturbed question#: 
+def is_nested(input):
+    """"""
+    Develop a function that accepts a string, list, dictionary, or float as input. 
+    If the input is a string, it should only contain square brackets.
+    If the input is a list or dictionary, it should only have square brackets as elements or keys/values.
+    If the input is a float, it should be converted to a string with square brackets replacing the decimal point and zeros.
+    The function should return True only if there is a valid sequence of brackets 
+    where at least one bracket in the sequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    is_nested(['[[]]', '[]']) ➞ True
+    is_nested({'[[]]': '[]', '[][]': '[]'}) ➞ True
+    is_nested(1.0) ➞ False
+    is_nested(1.01) ➞ True
+    """"""","Instruction: Create a new question following the #rewrite requirement# based on original question. You should analyze the #rewrite requirement# and #original coding question# first in a step by step manner first before create the new math question, as the requirement is complicated.
+#rewrite requirement#: Generalize the input parameter class type by expanding to one or more python classes, for example string, dict and list, float. The requirement should also expand accordingly to achieve similar requirements for those expanded types
+Your output should be: [#Rewritten Coding Question#]
+#Original Coding Question#:def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+"
+Parameter Content,"def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+","Answer:
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+","def is_nested(bracket_sequence):
+    """"""
+    Create a function that takes a sequence of square brackets as input.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested. The sequence of brackets is 
+    represented as a string where each character is either an opening or closing square bracket.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""","#perturbed question#: def is_nested(bracket_string):
+    """"""
+    Create a function that takes a string, bracket_string, as input. This string represents a sequence of square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested. Each character in the bracket_string is either an opening or closing square bracket.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""","Instruction: Create a new question following the #rewrite requirement# based on original question. You should analyze the #rewrite requirement# and #original coding question# first in a step by step manner first before create the new math question, as the requirement is complicated.
+#rewrite requirement#: Revise the definition and purpose of the input parameter in the function described in the #original coding question#. Additionally, update the function's docstring to accurately reflect the new meaning and role of the parameter.
+Your output should be: [#Rewritten Coding Question#]
+#Original Coding Question#:def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+#Rewritten Coding Question#:
+"
+Variable Type,"def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+","Answer:
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+","def is_nested(list):
+    """"""
+    Create a function that takes a list as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested(['[', '[', ']', ']']) ➞ True
+    is_nested(['[', ']', ']', ']', ']', ']', ']', '[', '[', '[', '[', '[', ']', ']']) ➞ False
+    is_nested(['[', ']', '[', ']']) ➞ False
+    is_nested(['[', ']']) ➞ False
+    is_nested(['[', '[', ']', '[', ']', ']']) ➞ True
+    is_nested(['[', '[', ']', ']', '[', '[']) ➞ True
+    """"""","#perturbed question#: def is_nested(bracket_list):
+    """"""
+    Create a function that takes a list of strings as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested(['[', '[', ']', ']']) ➞ True
+    is_nested(['[', ']', ']', ']', ']', ']', ']', '[', '[', '[', '[', '[', ']', ']']) ➞ False
+    is_nested(['[', ']', '[', ']']) ➞ False
+    is_nested(['[', ']']) ➞ False
+    is_nested(['[', '[', ']', '[', ']', ']']) ➞ True
+    is_nested(['[', '[', ']', ']', '[', '[']) ➞ True
+    """"""","Instruction: Create a new question following the #rewrite requirement# based on original question. You should analyze the #rewrite requirement# and #original coding question# first in a step by step manner first before create the new math question, as the requirement is complicated.
+#rewrite requirement#: Keep the same requirement except changing the type of the parameter in #original coding question#. For example, you can change int to str
+Your output should be: [#Rewritten Coding Question#]
+#Original Coding Question#:def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+#Rewritten Coding Question#:
+"
+Code Execution,"def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+","Answer:
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+","Find the output of the following function, if the input is:The input parameter for the function is a string that contains only square brackets. 
+
+For example, you can use the string ""[[[]]]"" as an input parameter.
+def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+","#perturbed question#: def is_nested(bracket_list):
+    """"""
+    Create a function that takes a list of strings as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested(['[', '[', ']', ']']) ➞ True
+    is_nested(['[', ']', ']', ']', ']', ']', ']', '[', '[', '[', '[', '[', ']', ']']) ➞ False
+    is_nested(['[', ']', '[', ']']) ➞ False
+    is_nested(['[', ']']) ➞ False
+    is_nested(['[', '[', ']', '[', ']', ']']) ➞ True
+    is_nested(['[', '[', ']', ']', '[', '[']) ➞ True
+    """"""","Instruction: Find only one set of values for the input parameters that can be used for the function below.
+#Function#:def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+
+#Input Values#:
+"
+Parameter Relationship,"def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+","Answer:
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+","If the output for the below function is One possible output for the function is:
+
+is_nested(""[[]]"") would return True.What are possible relations between the input parameters
+Function:def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+","#perturbed question#: def is_nested(bracket_list):
+    """"""
+    Create a function that takes a list of strings as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested(['[', '[', ']', ']']) ➞ True
+    is_nested(['[', ']', ']', ']', ']', ']', ']', '[', '[', '[', '[', '[', ']', ']']) ➞ False
+    is_nested(['[', ']', '[', ']']) ➞ False
+    is_nested(['[', ']']) ➞ False
+    is_nested(['[', '[', ']', '[', ']', ']']) ➞ True
+    is_nested(['[', '[', ']', ']', '[', '[']) ➞ True
+    """"""","Instruction: give one possible output for the function.#Function#:def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+
+"
+Variable Substitution,"def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+","Answer:
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+","def is_nested(string, subsequence):
+    """"""
+    Create a function that takes a string and a subsequence as input. The string contains only square brackets.
+    The function should return True if and only if the subsequence is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]', '[]') ➞ True
+    is_nested('[]]]]]]][[[[[]', '[]') ➞ False
+    is_nested('[][]', '[]') ➞ False
+    is_nested('[]', '[]') ➞ False
+    is_nested('[[][]]', '[]') ➞ True
+    is_nested('[[]][[', '[]') ➞ True
+    """"""","#Rewritten Coding Question#: 
+def is_nested(string, subsequence):
+    """"""
+    Create a function that takes a string and a subsequence as input. The string contains only square brackets.
+    The function should return True if and only if the subsequence is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]', '[]') ➞ True
+    is_nested('[]]]]]]][[[[[]', '[]') ➞ False
+    is_nested('[][]', '[]') ➞ False
+    is_nested('[]', '[]') ➞ False
+    is_nested('[[][]]', '[]') ➞ True
+    is_nested('[[]][[', '[]') ➞ True
+    """"""","Instruction: Create a new question following the #rewrite requirement# based on original question. You should analyze the #rewrite requirement# and #original coding question# first in a step by step manner first before create the new math question, as the requirement is complicated.
+#rewrite requirement#: Substitute one specific value in docstring as a input parameter to the function.Your output should be: [#Rewritten Coding Question#]
+#Original Coding Question#:def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+#Rewritten Coding Question#:
+"
+Reverse Engineering,"def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+","Answer:
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+","Instruction: write a function requirement that reverse engineer the given function.
+def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+
+","#Rewritten Coding Question#: 
+def is_nested(string, subsequence):
+    """"""
+    Create a function that takes a string and a subsequence as input. The string contains only square brackets.
+    The function should return True if and only if the subsequence is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]', '[]') ➞ True
+    is_nested('[]]]]]]][[[[[]', '[]') ➞ False
+    is_nested('[][]', '[]') ➞ False
+    is_nested('[]', '[]') ➞ False
+    is_nested('[[][]]', '[]') ➞ True
+    is_nested('[[]][[', '[]') ➞ True
+    """"""","Instruction: write a function requirement that reverse engineer the given function.
+def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+
+"
+WhatIf Code,"def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+","Answer:
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+","If the output to the following function is 
+""""""
+    is_nested(masked_input) ➞ True
+""""""
+Function:
+
+    def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+
+    What if the function is now changed to:
+    def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least two brackets in the subsequence are nested.
+    """"""
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 3
+    What will be the output to the function?
+    ","#Rewritten Coding Question#: 
+def is_nested(string, subsequence):
+    """"""
+    Create a function that takes a string and a subsequence as input. The string contains only square brackets.
+    The function should return True if and only if the subsequence is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]', '[]') ➞ True
+    is_nested('[]]]]]]][[[[[]', '[]') ➞ False
+    is_nested('[][]', '[]') ➞ False
+    is_nested('[]', '[]') ➞ False
+    is_nested('[[][]]', '[]') ➞ True
+    is_nested('[[]][[', '[]') ➞ True
+    """"""","Choose one example below and mask only one of the input value with variable in the example with masked_input. Please give me the example after masking
+#Examples#:
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+#Masked Example#:
+"
+Solve Input,"def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+","Answer:
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+","What are possible input to the following function, if the output is:
+True
+def is_nested(string):
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+","#Rewritten Coding Question#: 
+def is_nested(string, subsequence):
+    """"""
+    Create a function that takes a string and a subsequence as input. The string contains only square brackets.
+    The function should return True if and only if the subsequence is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]', '[]') ➞ True
+    is_nested('[]]]]]]][[[[[]', '[]') ➞ False
+    is_nested('[][]', '[]') ➞ False
+    is_nested('[]', '[]') ➞ False
+    is_nested('[[][]]', '[]') ➞ True
+    is_nested('[[]][[', '[]') ➞ True
+    """"""","Give only one possible output for the following function
+def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+
+You should only give output, and should not give input
+[#Possible Output#]:
+"
+Variable Range,"def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+","Answer:
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+","Find the output of the following function, if the input is within the range:The input parameter for the function is_nested(string) is a string. This string can contain any number of characters, but for the function to work as intended, it should only contain square brackets ('[' and ']'). So, the range of values that the input parameter can take is any string composed of the characters '[' and ']'.
+def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+","#Rewritten Coding Question#: 
+def is_nested(string, subsequence):
+    """"""
+    Create a function that takes a string and a subsequence as input. The string contains only square brackets.
+    The function should return True if and only if the subsequence is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]', '[]') ➞ True
+    is_nested('[]]]]]]][[[[[]', '[]') ➞ False
+    is_nested('[][]', '[]') ➞ False
+    is_nested('[]', '[]') ➞ False
+    is_nested('[[][]]', '[]') ➞ True
+    is_nested('[[]][[', '[]') ➞ True
+    """"""","Instruction: Identify the range of values that the input parameters can take for the function below.
+#Function#:def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+
+#Input Range#:
+"
+Test Case,"def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+","Answer:
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+","Write test cases that can test for the following function
+def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+","#Rewritten Coding Question#: 
+def is_nested(string, subsequence):
+    """"""
+    Create a function that takes a string and a subsequence as input. The string contains only square brackets.
+    The function should return True if and only if the subsequence is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]', '[]') ➞ True
+    is_nested('[]]]]]]][[[[[]', '[]') ➞ False
+    is_nested('[][]', '[]') ➞ False
+    is_nested('[]', '[]') ➞ False
+    is_nested('[[][]]', '[]') ➞ True
+    is_nested('[[]][[', '[]') ➞ True
+    """"""",
+Incomplete Answer,"def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+","Answer:
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+","Instruction: Fulfill the missing code in the following function
+#Rewritten Coding Question#: 
+
+Create a function named ""is_nested"" that accepts a string as an argument. This string should only contain square brackets. The function should return True if there is a valid sequence of brackets where at least one bracket in the sequence is nested. However, some lines of the code are missing and you need to fill them in.
+
+For example:
+is_nested('[[]]') should return True
+is_nested('[]]]]]]][[[[[]') should return False
+is_nested('[][]') should return False
+is_nested('[]') should return False
+is_nested('[[][]]') should return True
+is_nested('[[]][[') should return True","""""""
+Create a function named ""is_nested"" that takes a string as input. This string should only contain square brackets. The function should return True if and only if there is a valid subsequence of brackets where at least one bracket in the subsequence is nested. However, some lines of the code are missing and you need to fill them in.
+
+For example:
+is_nested('[[]]') should return True
+is_nested('[]]]]]]][[[[[]') should return False
+is_nested('[][]') should return False
+is_nested('[]') should return False
+is_nested('[[][]]') should return True
+is_nested('[[]][[') should return True
+""""""","Instruction: Create a new question following the #rewrite requirement# based on original question. You should analyze the #rewrite requirement# and #original coding question# first in a step by step manner first before create the new math question, as the requirement is complicated.
+#rewrite requirement#: You should give an code solution to the #original coding question# with some lines of the code missing#Original Coding Question#:def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+"
+Question Formulation,"def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+","Answer:
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+","Write a code description for the following code and provide one use case
+def is_nested(string):
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+","""""""
+Create a function named ""is_nested"" that takes a string as input. This string should only contain square brackets. The function should return True if and only if there is a valid subsequence of brackets where at least one bracket in the subsequence is nested. However, some lines of the code are missing and you need to fill them in.
+
+For example:
+is_nested('[[]]') should return True
+is_nested('[]]]]]]][[[[[]') should return False
+is_nested('[][]') should return False
+is_nested('[]') should return False
+is_nested('[[][]]') should return True
+is_nested('[[]][[') should return True
+""""""",
+Introduce Bias,"def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+","Answer:
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+","#New Coding Question#: def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[[[]]]]') ➞ True
+    is_nested('[[[[[[[[]]]]]]]]') ➞ True
+    is_nested('[[[]]]') ➞ True
+    is_nested('[[[[[]]]]]') ➞ True
+    is_nested('[[[[[[[]]]]]]]') ➞ True
+    """"""","#perturbed question#: def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[[[]]]]') ➞ True
+    is_nested('[[[[[[[[]]]]]]]]') ➞ True
+    is_nested('[[[]]]') ➞ True
+    is_nested('[[[[[]]]]]') ➞ True
+    is_nested('[[[[[[[]]]]]]]') ➞ True
+    """"""","Instruction: Create a new question following the #rewrite requirement# based on original question. You should analyze the #rewrite requirement# and #original coding question# first in a step by step manner first before create the new math question, as the requirement is complicated.
+#rewrite requirement#: replace the examples in the docstring to take in only certain kind of input. 
+#Original Coding Question#:def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+"
+Reduce Complexity,"def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+","Answer:
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+","Reduce the complexity of the following function
+def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+#Rewritten Coding Question#: Develop a function that accepts a string as an argument, which only includes square brackets. The function should return True only if there is a valid subsequence of brackets where at least one bracket in the subsequence is nested. However, the function should be written in a way that adds unnecessary complexity to the solution.","#Refined Question#: Can you write a function that takes a string as input, which only contains square brackets? The function should return True only if there is a valid subsequence of brackets where at least one bracket in the subsequence is nested. However, the function should be written in a way that adds unnecessary complexity to the solution.","Instruction: Create a new question following the #rewrite requirement# based on original question. You should analyze the #rewrite requirement# and #original coding question# first in a step by step manner first before create the new math question, as the requirement is complicated.
+#rewrite requirement#: answer the coding question below with unnecessary complexity 
+#Original Coding Question#:def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+"
+Step Necessity,"def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+","Answer:
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+","#Rewritten Coding Question#: What is the purpose of the line ""closing_bracket_index.reverse()"" in the given code?","#perturbed question#: What is the purpose of the line ""closing_bracket_index.reverse()"" in the function ""is_nested"" which takes a string of only square brackets as input and returns True if there is a valid subsequence of brackets where at least one bracket in the subsequence is nested?","Instruction: Create a new question following the #rewrite requirement# based on original question. You should analyze the #rewrite requirement# and #original coding question# first in a step by step manner first before create the new math question, as the requirement is complicated.
+#rewrite requirement#: Pick a line from the code and check what is the functionality of that particular line. 
+#Original Coding Question#:def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+
+"
+Theoretical Basis,"def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+","Answer:
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+",#New Coding Question#: Write a function that accepts a string consisting only of parentheses. The function should return True if there is a valid sequence of parentheses where at least one pair of parentheses is nested.,#perturbed question#: Write a function that accepts a string consisting only of square brackets. The function should return True if there is a valid sequence of brackets where at least one bracket in the subsequence is nested.,"Instruction: Create a new question following the #rewrite requirement# based on original question. You should analyze the #rewrite requirement# and #original coding question# first in a step by step manner first before create the new math question, as the requirement is complicated.
+#rewrite requirement#: Identify the underlying key coding concepts to the answer the following function
+#Original Coding Question#:def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+"
+Code Complexity,"def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+","Answer:
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+","Analyze the time complexity and space complexity regarding to each input parameter of the following function:
+def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+",#perturbed question#: Write a function that accepts a string consisting only of square brackets. The function should return True if there is a valid sequence of brackets where at least one bracket in the subsequence is nested.,
+Example Requirement,"def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+","Answer:
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+","#Rewritten Coding Question#:
+def is_nested(string):
+    """"""
+    This function takes a string as input which contains only square brackets. It checks if there is a valid subsequence of brackets where at least one bracket in the subsequence is nested. If such a subsequence exists, the function returns True, otherwise it returns False.
+
+    Let's take a look at some examples:
+
+    Example 1:
+    is_nested('[[]]')
+    The input string here is '[[]]'. We can see that there is a subsequence of brackets '[]' that is nested within another pair of brackets '[]'. Hence, the function returns True.
+
+    Example 2:
+    is_nested('[]]]]]]][[[[[]')
+    The input string here is '[]]]]]]][[[[[]'. There is no valid subsequence of brackets where at least one bracket is nested. Hence, the function returns False.
+
+    Example 3:
+    is_nested('[][]')
+    The input string here is '[][]'. Again, there is no valid subsequence of brackets where at least one bracket is nested. Hence, the function returns False.
+
+    Example 4:
+    is_nested('[]')
+    The input string here is '[]'. There is only one pair of brackets and no nested brackets. Hence, the function returns False.
+
+    Example 5:
+    is_nested('[[][]]')
+    The input string here is '[[][]]'. We can see that there is a subsequence of brackets '[]' that is nested within another pair of brackets '[]'. Hence, the function returns True.
+
+    Example 6:
+    is_nested('[[]][[')
+    The input string here is '[[]][['. We can see that there is a subsequence of brackets '[]' that is nested within another pair of brackets '[]'. Hence, the function returns True.
+    """"""","#Rewritten Coding Question#:
+def is_nested(string):
+    """"""
+    This function takes a string as input which contains only square brackets. It checks if there is a valid subsequence of brackets where at least one bracket in the subsequence is nested. If such a subsequence exists, the function returns True, otherwise it returns False.
+
+    Let's take a look at some examples:
+
+    Example 1:
+    is_nested('[[]]')
+    The input string here is '[[]]'. We can see that there is a subsequence of brackets '[]' that is nested within another pair of brackets '[]'. Hence, the function returns True.
+
+    Example 2:
+    is_nested('[]]]]]]][[[[[]')
+    The input string here is '[]]]]]]][[[[[]'. There is no valid subsequence of brackets where at least one bracket is nested. Hence, the function returns False.
+
+    Example 3:
+    is_nested('[][]')
+    The input string here is '[][]'. Again, there is no valid subsequence of brackets where at least one bracket is nested. Hence, the function returns False.
+
+    Example 4:
+    is_nested('[]')
+    The input string here is '[]'. There is only one pair of brackets and no nested brackets. Hence, the function returns False.
+
+    Example 5:
+    is_nested('[[][]]')
+    The input string here is '[[][]]'. We can see that there is a subsequence of brackets '[]' that is nested within another pair of brackets '[]'. Hence, the function returns True.
+
+    Example 6:
+    is_nested('[[]][[')
+    The input string here is '[[]][['. We can see that there is a subsequence of brackets '[]' that is nested within another pair of brackets '[]'. Hence, the function returns True.
+    """"""","Instruction: Create a new question following the #rewrite requirement# based on original question. You should analyze the #rewrite requirement# and #original coding question# first in a step by step manner first before create the new math question, as the requirement is complicated.
+#rewrite requirement#: The rewritten function should 1) include examples explained step by step how it goes from input to output. 2) It should delete the original function requirement in the docstring
+#Original Coding Question#:def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+"
+Incomplete Requirement,"def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+","Answer:
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+","#New Coding Question#: def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""","#perturbed question#: def is_nested(string):
+    """"""
+    Create a function that takes a string as input. The function should return True if and only if there is a valid subsequence of brackets.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""","Instruction: Create a new question following the #rewrite requirement# based on original question. You should analyze the #rewrite requirement# and #original coding question# first in a step by step manner first before create the new math question, as the requirement is complicated.
+#rewrite requirement#: The rewritten function should remove one piece of information from the docstring to make it incomplete
+#Original Coding Question#:def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+"
+Wrong Example,"def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+","Answer:
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+","#Rewrite Requirement#: Rewrite the function to use a misleading example as demonstration
+#Original Coding Question#: def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+#New Coding Question#: def is_nested(string):
+    """"""
+    Construct a function that accepts a string as input which includes only square brackets.
+    The function should return True exclusively when there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested. To illustrate, consider the following examples:
+    """"""
+
+    """"""
+    is_nested('[[[]]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][][]]') ➞ True
+    is_nested('[[]][[[]]]') ➞ True
+    """"""","#perturbed question#: def is_nested(string):
+    """"""
+    Create a function that takes a string as input. The function should return True if and only if there is a valid subsequence of brackets.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""","Instruction: Create a new question following the #rewrite requirement# based on original question. You should analyze the #rewrite requirement# and #original coding question# first in a step by step manner first before create the new math question, as the requirement is complicated.
+Rewrite the function below to use a misleading example as demonstration
+#Original Coding Question#:def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+"
+Runtime Error,"def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+","Answer:
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+","Debug the error in the following code
+#Function#:def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= '2' # This will cause a TypeError at runtime because we're trying to compare an integer with a string.","#perturbed question#: def is_nested(string):
+    """"""
+    Create a function that takes a string as input. The function should return True if and only if there is a valid subsequence of brackets.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""","Introduce a Python Runtime Error to the following function that is hard to notice and debug. You should not add any new lines of code
+#Function#:def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+
+"
+Logical Error,"def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+","Answer:
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+","Debug the error in the following code
+The function is_nested(string) can be modified to introduce a Python ValueError that is hard to notice and debug by changing the comparison operator in the if condition from less than '<' to less than or equal to '<='.
+
+Here is the modified function:
+
+```python
+def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx <= closing_bracket_index[i]:  # Here is the change
+            cnt += 1
+            i += 1
+    return cnt >= 2
+```
+
+This change will cause a ValueError because the function will now incorrectly count brackets that are not nested as nested. This error is hard to notice and debug because it is not a syntax error and will not cause the program to crash. Instead, it will cause the function to return incorrect results, which can be difficult to trace back to this specific line of code.","#perturbed question#: def is_nested(string):
+    """"""
+    Create a function that takes a string as input. The function should return True if and only if there is a valid subsequence of brackets.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""","Introduce a Python Value Error to the following function that is hard to notice and debug. You should not add any new lines of code
+#Function#:def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+
+"
+Realworld Usecase,"def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+","Answer:
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+","def check_bracket_sequence(text):
+    """"""
+    Imagine you are developing a text editor that needs to check if the square brackets in the user's input are properly nested.
+    This function takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid sequence of brackets 
+    where at least one bracket in the sequence is nested.
+    """"""
+
+    """"""
+    check_bracket_sequence('[[]]') ➞ True
+    check_bracket_sequence('[]]]]]]][[[[[]') ➞ False
+    check_bracket_sequence('[][]') ➞ False
+    check_bracket_sequence('[]') ➞ False
+    check_bracket_sequence('[[][]]') ➞ True
+    check_bracket_sequence('[[]][[') ➞ True
+    """"""","#perturbed question#: def validate_bracket_nesting(user_input):
+    """"""
+    Suppose you are designing a code editor that needs to validate if the square brackets in the user's code are correctly nested.
+    This function takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid sequence of brackets 
+    where at least one bracket in the sequence is nested.
+    """"""
+
+    """"""
+    validate_bracket_nesting('[[]]') ➞ True
+    validate_bracket_nesting('[]]]]]]][[[[[]') ➞ False
+    validate_bracket_nesting('[][]') ➞ False
+    validate_bracket_nesting('[]') ➞ False
+    validate_bracket_nesting('[[][]]') ➞ True
+    validate_bracket_nesting('[[]][[') ➞ True
+    """"""","Instruction: Create a new question following the #rewrite requirement# based on original question. You should analyze the #rewrite requirement# and #original coding question# first in a step by step manner first before create the new math question, as the requirement is complicated.
+#rewrite requirement#: The rewritten docstring should frame the function requirment in a real world scenario that uses this function. The rewritten function requirement may be different from the original requirement. You should also change the function name
+Your output should only be: [#Rewritten Coding Docstring#]
+#Original Coding Question#:def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+#Rewritten Coding Question#:
+"
+Parameter Sequence,"def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+","Answer:
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+","#Modified Coding Question#
+def bracket_sequence_checker(bracket_sequence):
+    """"""
+    Create a function that takes a bracket_sequence as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    bracket_sequence_checker('[[]]') ➞ True
+    bracket_sequence_checker('[]]]]]]][[[[[]') ➞ False
+    bracket_sequence_checker('[][]') ➞ False
+    bracket_sequence_checker('[]') ➞ False
+    bracket_sequence_checker('[[][]]') ➞ True
+    bracket_sequence_checker('[[]][[') ➞ True
+    """"""","#perturbed question#: def validate_bracket_nesting(user_input):
+    """"""
+    Suppose you are designing a code editor that needs to validate if the square brackets in the user's code are correctly nested.
+    This function takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid sequence of brackets 
+    where at least one bracket in the sequence is nested.
+    """"""
+
+    """"""
+    validate_bracket_nesting('[[]]') ➞ True
+    validate_bracket_nesting('[]]]]]]][[[[[]') ➞ False
+    validate_bracket_nesting('[][]') ➞ False
+    validate_bracket_nesting('[]') ➞ False
+    validate_bracket_nesting('[[][]]') ➞ True
+    validate_bracket_nesting('[[]][[') ➞ True
+    """"""","Instruction: Change the input parameter sequence of the function header below then Change the input parameter name and function name to wired names of the function header below#Original Coding Question#:def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+"
+True False,"def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+","Answer:
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+","Evaluate whether the solution below is the correct solution for the coding question, True or False?
+Coding Question:
+def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+Solution:
+The provided solution is incorrect and misleading because it doesn't correctly check for nested brackets. It simply counts the number of opening brackets that come before closing brackets, which doesn't necessarily mean they are nested. For example, the string '[][]' would return True with this function, even though there are no nested brackets.
+
+Here is the incorrect solution:
+
+```python
+def is_nested(string):
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+```
+
+This solution will not correctly identify whether a string contains nested brackets. It will return True for strings that contain two or more opening brackets before a closing bracket, regardless of whether they are nested or not.","#perturbed question#: def validate_bracket_nesting(user_input):
+    """"""
+    Suppose you are designing a code editor that needs to validate if the square brackets in the user's code are correctly nested.
+    This function takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid sequence of brackets 
+    where at least one bracket in the sequence is nested.
+    """"""
+
+    """"""
+    validate_bracket_nesting('[[]]') ➞ True
+    validate_bracket_nesting('[]]]]]]][[[[[]') ➞ False
+    validate_bracket_nesting('[][]') ➞ False
+    validate_bracket_nesting('[]') ➞ False
+    validate_bracket_nesting('[[][]]') ➞ True
+    validate_bracket_nesting('[[]][[') ➞ True
+    """"""","Generate a wrong and misleading solution for the following coding question
+Coding Question:
+def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+"
+Complex Docstring,"def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+","Answer:
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+","#Rewritten Coding Question#: def is_nested(string):
+    """"""
+    Construct a function that accepts a string as an input parameter. This string should only contain square brackets. 
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested. 
+    However, the function should also check if the string contains any other characters apart from square brackets. 
+    If it does, the function should return False. 
+    Additionally, the function should also check if the string is empty. 
+    If it is, the function should return False. 
+    Furthermore, the function should also check if the string contains an equal number of opening and closing brackets. 
+    If it does not, the function should return False. 
+    Finally, the function should also check if the string contains any nested brackets. 
+    If it does not, the function should return False.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""","#perturbed question#: Construct a function named 'is_nested' that takes a string as an input. This string should only contain square brackets. The function should return True if and only if there is a valid subsequence of brackets where at least one bracket in the subsequence is nested. The function should also validate if the string contains any characters other than square brackets. If it does, the function should return False. The function should also validate if the string is empty. If it is, the function should return False. Moreover, the function should validate if the string contains an equal number of opening and closing brackets. If it does not, the function should return False. Lastly, the function should validate if the string contains any nested brackets. If it does not, the function should return False.","Instruction: Create a new question following the #rewrite requirement# based on original question. You should analyze the #rewrite requirement# and #original coding question# first in a step by step manner first before create the new math question, as the requirement is complicated.
+#rewrite requirement#: The rewritten docstring should make the original function requirement unnecessarily complicated.
+#Original Coding Question#:def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+"
+Identical Code,"def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+","Answer:
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+","#New Coding Question#: Please provide two different implementations for a function that accepts a string consisting only of parentheses. The function should return True only if there is a valid sequence of parentheses where at least one pair of parentheses is nested within another pair. After creating the two implementations, please verify if they produce the same results.
+
+""""""
+For example:
+
+is_nested('(()())') ➞ True
+is_nested('()()()') ➞ False
+is_nested('()') ➞ False
+is_nested('((()))') ➞ True
+is_nested('()(()))') ➞ False
+is_nested('(())(())') ➞ True
+""""""","#perturbed question#: Construct a function named 'is_nested' that takes a string as an input. This string should only contain square brackets. The function should return True if and only if there is a valid subsequence of brackets where at least one bracket in the subsequence is nested. The function should also validate if the string contains any characters other than square brackets. If it does, the function should return False. The function should also validate if the string is empty. If it is, the function should return False. Moreover, the function should validate if the string contains an equal number of opening and closing brackets. If it does not, the function should return False. Lastly, the function should validate if the string contains any nested brackets. If it does not, the function should return False.",
+No Keyword,"def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+","Answer:
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+","Instruction: Answer the coding function below without using python keyword 'for'
+def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+","#perturbed question#: Construct a function named 'is_nested' that takes a string as an input. This string should only contain square brackets. The function should return True if and only if there is a valid subsequence of brackets where at least one bracket in the subsequence is nested. The function should also validate if the string contains any characters other than square brackets. If it does, the function should return False. The function should also validate if the string is empty. If it is, the function should return False. Moreover, the function should validate if the string contains an equal number of opening and closing brackets. If it does not, the function should return False. Lastly, the function should validate if the string contains any nested brackets. If it does not, the function should return False.",
+X Language,"def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+","Answer:
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+","Answer the coding question below in javascript
+function is_nested(string) {
+    // Your code here
+}","#perturbed question#: Construct a function named 'is_nested' that takes a string as an input. This string should only contain square brackets. The function should return True if and only if there is a valid subsequence of brackets where at least one bracket in the subsequence is nested. The function should also validate if the string contains any characters other than square brackets. If it does, the function should return False. The function should also validate if the string is empty. If it is, the function should return False. Moreover, the function should validate if the string contains an equal number of opening and closing brackets. If it does not, the function should return False. Lastly, the function should validate if the string contains any nested brackets. If it does not, the function should return False.","Rewrite the function header below in javascript (you do not need to answer it)
+def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+"
+Alternative Answer,"def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+","Answer:
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+","Find an alternative solution for the following coding question
+def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+Solution:
+opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2","#perturbed question#: Construct a function named 'is_nested' that takes a string as an input. This string should only contain square brackets. The function should return True if and only if there is a valid subsequence of brackets where at least one bracket in the subsequence is nested. The function should also validate if the string contains any characters other than square brackets. If it does, the function should return False. The function should also validate if the string is empty. If it is, the function should return False. Moreover, the function should validate if the string contains an equal number of opening and closing brackets. If it does not, the function should return False. Lastly, the function should validate if the string contains any nested brackets. If it does not, the function should return False.",
+Simple Name,"def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+
+","Answer:
+
+    opening_bracket_index = []
+    closing_bracket_index = []
+    for i in range(len(string)):
+        if string[i] == '[':
+            opening_bracket_index.append(i)
+        else:
+            closing_bracket_index.append(i)
+    closing_bracket_index.reverse()
+    cnt = 0
+    i = 0
+    l = len(closing_bracket_index)
+    for idx in opening_bracket_index:
+        if i < l and idx < closing_bracket_index[i]:
+            cnt += 1
+            i += 1
+    return cnt >= 2
+","Answer the coding question below and only use 5 letter word for each variable names inside the solution
+def is_nested(string):
+    """"""
+    Create a function that takes a string as input which contains only square brackets.
+    The function should return True if and only if there is a valid subsequence of brackets 
+    where at least one bracket in the subsequence is nested.
+    """"""
+
+    """"""
+    is_nested('[[]]') ➞ True
+    is_nested('[]]]]]]][[[[[]') ➞ False
+    is_nested('[][]') ➞ False
+    is_nested('[]') ➞ False
+    is_nested('[[][]]') ➞ True
+    is_nested('[[]][[') ➞ True
+    """"""
+","#perturbed question#: Construct a function named 'is_nested' that takes a string as an input. This string should only contain square brackets. The function should return True if and only if there is a valid subsequence of brackets where at least one bracket in the subsequence is nested. The function should also validate if the string contains any characters other than square brackets. If it does, the function should return False. The function should also validate if the string is empty. If it is, the function should return False. Moreover, the function should validate if the string contains an equal number of opening and closing brackets. If it does not, the function should return False. Lastly, the function should validate if the string contains any nested brackets. If it does not, the function should return False.",
