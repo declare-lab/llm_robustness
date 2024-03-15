@@ -196,7 +196,7 @@ def gen_solution_gsm8k_w_answer(filename: str, model_name="gpt4"):
         ) or dimension not in ontology.logic_alteration_category("gsm8k"):
             outputs.append("NA")
             continue
-        prompt = ontology.gsm8k_with_answer_prompt(
+        prompt = prompt_template.gsm8k_with_answer_prompt(
             perturbed_question=perturbed_question,
             original_question=o["original_question"],
             original_answer=o["original_answer"],
@@ -234,13 +234,13 @@ def gen_solution_human_eval_w_answer(filename: str, model_name="gpt4"):
         ) or dimension not in ontology.logic_alteration_category("human_eval"):
             outputs.append("NA")
             continue
-        # if instruction == "Closed Question":
-        #     instruction = (
-        #         "Generate a python function that fulfills the requirement below."
-        #     )
+        if instruction == "Closed Question":
+            instruction = (
+                "Generate a python function that fulfills the requirement below."
+            )
 
-        prompt = ontology.human_eval_with_answer_prompt(
-            # instruction=instruction,
+        prompt = prompt_template.human_eval_with_answer_prompt(
+            instruction=instruction,
             perturbed_question=perturbed_question,
             original_function=o["original_function"],
         )
@@ -378,9 +378,9 @@ def summarize_solution_gsm8k_cons(model_name="gpt4", index=0):
     outputs = []
     for i, o in tqdm(df0.iterrows(), total=len(df0)):
         counterfactual = o["perturbed_question"]
-        answer0 = df0.iloc[i]["output"]
-        answer1 = df1.iloc[i]["output"]
-        answer2 = df2.iloc[i]["output"]
+        answer0 = df0.at[i, "output"]
+        answer1 = df1.at[i, "output"]
+        answer2 = df2.at[i, "output"]
 
         prompt = prompt_method(
             perturbed_question=counterfactual,
@@ -396,29 +396,29 @@ def summarize_solution_gsm8k_cons(model_name="gpt4", index=0):
     return output
 
 
-def compare_solution_gsm8k(
-    filename: str, eval_model_name="gpt4", output_column="output"
-):
-    print(locals())
-    dataset_name = "gsm8k"
+# def compare_solution_gsm8k(
+#     filename: str, eval_model_name="gpt4", output_column="output"
+# ):
+#     print(locals())
+#     dataset_name = "gsm8k"
 
-    df = pd.read_csv(filename)
-    model = select_model(eval_model_name)
-    prompt_method = prompt_template.gsm8k_compare_prompt
+#     df = pd.read_csv(filename)
+#     model = select_model(eval_model_name)
+#     prompt_method = prompt_template.gsm8k_compare_prompt
 
-    gpt4_labels = []
-    for i, o in tqdm(df.iterrows(), total=len(df)):
-        perturbed_question = o["perturbed_question"]
-        generated = o[output_column]
-        gold = o["answer"]
-        prompt = prompt_method(
-            question=perturbed_question, generated_answer=generated, gold_answer=gold
-        )
-        label = model.generate(prompt)
-        gpt4_labels.append(label)
+#     gpt4_labels = []
+#     for i, o in tqdm(df.iterrows(), total=len(df)):
+#         perturbed_question = o["perturbed_question"]
+#         generated = o[output_column]
+#         gold = o["answer"]
+#         prompt = prompt_method(
+#             question=perturbed_question, generated_answer=generated, gold_answer=gold
+#         )
+#         label = model.generate(prompt)
+#         gpt4_labels.append(label)
 
-    df["gpt4_label"] = gpt4_labels
-    df.to_csv(filename, index=False)
+#     df["gpt4_label"] = gpt4_labels
+#     df.to_csv(filename, index=False)
 
 
 def gen_testcase_input_human_eval(filename: str = "human_eval.csv"):
@@ -530,10 +530,8 @@ def run_testcode_human_eval(filename: str = "human_eval.csv"):
     filename: human_eval.csv
     """
     print(locals())
-    dataset_name = "human_eval"
 
     df = pd.read_csv(filename)
-    ontology = Ontoloty()
 
     labels = []
     passes = []
