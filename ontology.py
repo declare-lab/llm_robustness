@@ -1,4 +1,5 @@
 import random
+
 from pydantic import BaseModel
 
 
@@ -1130,8 +1131,12 @@ Answer: [final answer]
 
 
 class PerturbTemplateGSM8K(BaseModel):
-    instruct = "Instruction: Create a new question following the #rewrite requirement# based on original question.\n"
-    cot = "You should analyze the #rewrite requirement# first in a step by step manner first before create the new math question, as the requirement is complicated.\n"
+    instruct: str = (
+        "Instruction: Create a new question following the #rewrite requirement# based on original question.\n"
+    )
+    cot: str = (
+        "You should analyze the #rewrite requirement# first in a step by step manner first before create the new math question, as the requirement is complicated.\n"
+    )
 
     def gsm8k_question_simplification(self, item, category, model):
         answer, prompt = None, ""
@@ -1676,7 +1681,9 @@ class PerturbTemplateGSM8K(BaseModel):
 
 
 class PerturbTemplateHumanEval(BaseModel):
-    instruct = "Instruction: Create a new question following the #rewrite requirement# based on original question. You should analyze the #rewrite requirement# and #original coding question# first in a step by step manner first before create the new math question, as the requirement is complicated.\n"
+    instruct: str = (
+        "Instruction: Create a new question following the #rewrite requirement# based on original question. You should analyze the #rewrite requirement# and #original coding question# first in a step by step manner first before create the new math question, as the requirement is complicated.\n"
+    )
 
     def whole(self, item):
         return f"{item.function_header}{item.docstring}{item.examples}"
