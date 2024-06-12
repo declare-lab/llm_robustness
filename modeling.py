@@ -6,7 +6,6 @@ from typing import Optional
 import google.generativeai as genai
 import openai
 import torch
-import transformers
 from fire import Fire
 from peft import PeftModel
 from pydantic import BaseModel, Extra
@@ -142,8 +141,8 @@ class VLLM(BaseModel, arbitrary_types_allowed=True):
         return output[0].outputs[0].text
 
 
-class VLLMLlama3(BaseModel, arbitrary_types_allowed=True, extra=Extra.allow):
-    model_path: str
+class Llama3(BaseModel, arbitrary_types_allowed=True, extra=Extra.allow):
+    model_path: str = "meta-llama/Meta-Llama-3-8B-Instruct"
     model: Optional[LLM] = None
     max_output_length: int = 2048
     loaded: bool = False
@@ -153,47 +152,52 @@ class VLLMLlama3(BaseModel, arbitrary_types_allowed=True, extra=Extra.allow):
     sampling_params: Optional[SamplingParams] = None
 
     def load(self):
-        if "awq" in self.model_path.lower():
-            self.model = LLM(
-                self.model_path,
-                tensor_parallel_size=4,
-                quantization="awq",
-            )
-        else:
-            self.model = LLM(
-                self.model_path,
-            )
-        self.pipeline = transformers.pipeline(
-            "text-generation",
-            model=self.model_path,
-            model_kwargs={"torch_dtype": torch.bfloat16},
+        self.tokenizer = AutoTokenizer.from_pretrained(self.model_path)
+        self.model = AutoModelForCausalLM.from_pretrained(
+            self.model_path,
+            torch_dtype=torch.bfloat16,
             device_map="auto",
         )
-        tokenizer = self.model.get_tokenizer()
-        self.sampling_params = SamplingParams(
-            temperature=self.temperature,
-            max_tokens=self.max_output_length,
-            top_p=self.top_p,
-            top_k=self.top_k,
-            stop_token_ids=[
-                tokenizer.eos_token_id,
-                tokenizer.convert_tokens_to_ids("<|eot_id|>"),
-            ],
-        )
+        self.terminators = [
+            self.tokenizer.eos_token_id,
+            self.tokenizer.convert_tokens_to_ids("<|eot_id|>"),
+        ]
+
+        # self.pipeline = transformers.pipeline(
+        #     "text-generation",
+        #     model=self.model_path,
+        #     model_kwargs={"torch_dtype": torch.bfloat16},
+        #     device_map="auto",
+        # )
+        # self.sampling_params = SamplingParams(
+        #     temperature=self.temperature,
+        #     max_tokens=self.max_output_length,
+        #     top_p=self.top_p,
+        #     top_k=self.top_k,
+        #     stop_token_ids=[
+        #         tokenizer.eos_token_id,
+        #         tokenizer.convert_tokens_to_ids("<|eot_id|>"),
+        #     ],
+        # )
 
         self.loaded = True
 
     def generate(self, prompt: str, **kwargs) -> str:
         if not self.loaded:
             self.load()
-
+        input_ids = self.prepare_prompt(prompt, **kwargs)
         output = self.model.generate(
-            self.prepare_prompt(prompt, **kwargs),
-            self.sampling_params,
-            use_tqdm=False,
+            input_ids,
+            max_new_tokens=self.max_output_length,
+            eos_token_id=self.terminators,
+            do_sample=True,
+            temperature=self.temperature,
+            top_p=self.top_p,
             **kwargs,
         )
-        return output[0].outputs[0].text
+        response = output[0][input_ids.shape[-1] :]
+
+        return self.tokenizer.decode(response, skip_special_tokens=True)
 
     def prepare_prompt(self, user_prompt, system_prompt="", **kwargs):
         messages = [
@@ -204,9 +208,9 @@ class VLLMLlama3(BaseModel, arbitrary_types_allowed=True, extra=Extra.allow):
             {"role": "user", "content": user_prompt},
         ]
 
-        prompt = self.pipeline.tokenizer.apply_chat_template(
-            messages, tokenize=False, add_generation_prompt=True
-        )
+        prompt = self.tokenizer.apply_chat_template(
+            messages, add_generation_prompt=True, return_tensors="pt"
+        ).to(self.model.device)
 
         return prompt
 
@@ -355,8 +359,7 @@ def select_model(model_name, **kwargs):
         path = "TheBloke/Llama-2-70B-chat-AWQ"  # "meta-llama/Llama-2-70b-chat-hf",
         model = VLLM(model_path=path, **kwargs)
     elif model_name == "llama3":
-        path = "casperhansen/llama-3-70b-instruct-awq"
-        model = VLLMLlama3(model_path=path, **kwargs)
+        model = Llama3(**kwargs)
     elif model_name == "codellama":
         path = "TheBloke/CodeLlama-70B-Instruct-AWQ"
         model = VLLM(model_path=path, **kwargs)
