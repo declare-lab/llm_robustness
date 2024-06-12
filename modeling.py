@@ -5,6 +5,7 @@ from typing import Optional
 
 import google.generativeai as genai
 import openai
+import torch
 import transformers
 from fire import Fire
 from peft import PeftModel
@@ -18,9 +19,6 @@ from transformers import (
     PreTrainedTokenizer,
 )
 from vllm import LLM, SamplingParams
-
-
-import torch
 
 
 class SeqToSeqModel(BaseModel, arbitrary_types_allowed=True):
@@ -99,7 +97,7 @@ class VLLM(BaseModel, arbitrary_types_allowed=True):
     model: Optional[LLM]
     max_output_length: int = 2048
     loaded: bool = False
-    temperature = 0.8
+    temperature: float = 0.8
     top_p: float = 1.0
     top_k: int = -1
     sampling_params: Optional[SamplingParams]
@@ -146,18 +144,19 @@ class VLLM(BaseModel, arbitrary_types_allowed=True):
 
 class VLLMLlama3(BaseModel, arbitrary_types_allowed=True, extra=Extra.allow):
     model_path: str
-    model: Optional[LLM]
+    model: Optional[LLM] = None
     max_output_length: int = 2048
     loaded: bool = False
-    temperature = 0.8
+    temperature: float = 0.8
     top_p: float = 1.0
     top_k: int = -1
-    sampling_params: Optional[SamplingParams]
+    sampling_params: Optional[SamplingParams] = None
 
     def load(self):
         if "awq" in self.model_path.lower():
             self.model = LLM(
                 self.model_path,
+                tensor_parallel_size=4,
                 quantization="awq",
             )
         else:
@@ -213,9 +212,9 @@ class VLLMLlama3(BaseModel, arbitrary_types_allowed=True, extra=Extra.allow):
 
 
 class GPT4(BaseModel, arbitrary_types_allowed=True):
-    temperature = 0.0
-    version = "4"  # 4 or chat
-    loaded = False
+    temperature: float = 0.0
+    version: str = "4"  # 4 or chat
+    loaded: bool = False
     model: Optional[str]
     engine: Optional[str]
 
@@ -313,7 +312,7 @@ class GPT4(BaseModel, arbitrary_types_allowed=True):
 
 
 class Gemini(BaseModel, arbitrary_types_allowed=True):
-    loaded = False
+    loaded: bool = False
     temperature: Optional[float] = 0.0
     model_name: Optional[str]
     model: Optional[genai.GenerativeModel]
