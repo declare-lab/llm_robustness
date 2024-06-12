@@ -336,13 +336,16 @@ class Gemini(BaseModel, arbitrary_types_allowed=True):
         if not self.loaded:
             self.load()
             self.loaded = True
-        try:
-            response = self.model.generate_content(
-                input, generation_config=self.config
-            ).text
-        except Exception:
-            response = self.model.generate_content(input).text
-        return response
+        while True:
+            try:
+                response = self.model.generate_content(
+                    input, generation_config=self.config
+                ).text
+                return response
+            except Exception:
+                response = self.model.generate_content(input).text
+                print("error", response)
+            time.sleep(5)
 
 
 def select_model(model_name, **kwargs):
@@ -379,6 +382,8 @@ def select_model(model_name, **kwargs):
         model = Gemini(model_name="gemini-pro", **kwargs)
     elif model_name == "gemini-1.5":
         model = Gemini(model_name="gemini-1.5-flash", **kwargs)
+    elif model_name == "gemini-1.5-pro":
+        model = Gemini(model_name="gemini-1.5-pro", **kwargs)
     else:
         breakpoint()
 

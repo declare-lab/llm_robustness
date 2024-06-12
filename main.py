@@ -1,5 +1,6 @@
 import random
 import re
+import time
 from collections import defaultdict
 from copy import deepcopy
 
@@ -128,8 +129,9 @@ def gen_solution_gsm8k(
             print("-" * 20)
             print(output)
         outputs.append(output)
+        time.sleep(2)
 
-    df["f{model_name}_output"] = outputs
+    df[f"{model_name}_output"] = outputs
     df.to_csv(f"{dataset_name}_{model_name}_cot.csv", index=False)
     return df
 
