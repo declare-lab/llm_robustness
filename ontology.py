@@ -1036,7 +1036,7 @@ Solution:
         return prompt
 
     def gsm8k_cot_prompt(self, perturbed_question, model="default"):
-        if model in ["gpt4", "chatgpt", "gemini"]:
+        if model in ["gpt4", "chatgpt", "gemini", "gemini-1.5"]:
             prompt = f"""Solve the question step by step before give the final answer. Do not directly give the final answer.
 {perturbed_question}
 Reasoning Step: [reasoning steps]
@@ -1067,7 +1067,7 @@ Final Answer:
         return prompt
 
     def human_eval_cot_prompt(self, instruction, perturbed_question, model="default"):
-        if model in ["gpt4", "chatgpt", "gemini"]:
+        if model in ["gpt4", "chatgpt", "gemini", "gemini-1.5"]:
             prompt = f"""Instruction:{instruction}. You should answer the question in a step by step manner and do not directly give final answer.\n
 {perturbed_question}
 Solution:

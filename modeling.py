@@ -5,9 +5,10 @@ from typing import Optional
 
 import google.generativeai as genai
 import openai
+import transformers
 from fire import Fire
 from peft import PeftModel
-from pydantic import BaseModel
+from pydantic import BaseModel, Extra
 from tqdm import tqdm
 from transformers import (
     AutoModelForCausalLM,
@@ -17,6 +18,9 @@ from transformers import (
     PreTrainedTokenizer,
 )
 from vllm import LLM, SamplingParams
+
+
+import torch
 
 
 class SeqToSeqModel(BaseModel, arbitrary_types_allowed=True):
@@ -140,6 +144,74 @@ class VLLM(BaseModel, arbitrary_types_allowed=True):
         return output[0].outputs[0].text
 
 
+class VLLMLlama3(BaseModel, arbitrary_types_allowed=True, extra=Extra.allow):
+    model_path: str
+    model: Optional[LLM]
+    max_output_length: int = 2048
+    loaded: bool = False
+    temperature = 0.8
+    top_p: float = 1.0
+    top_k: int = -1
+    sampling_params: Optional[SamplingParams]
+
+    def load(self):
+        if "awq" in self.model_path.lower():
+            self.model = LLM(
+                self.model_path,
+                quantization="awq",
+            )
+        else:
+            self.model = LLM(
+                self.model_path,
+            )
+        self.pipeline = transformers.pipeline(
+            "text-generation",
+            model=self.model_path,
+            model_kwargs={"torch_dtype": torch.bfloat16},
+            device_map="auto",
+        )
+        tokenizer = self.model.get_tokenizer()
+        self.sampling_params = SamplingParams(
+            temperature=self.temperature,
+            max_tokens=self.max_output_length,
+            top_p=self.top_p,
+            top_k=self.top_k,
+            stop_token_ids=[
+                tokenizer.eos_token_id,
+                tokenizer.convert_tokens_to_ids("<|eot_id|>"),
+            ],
+        )
+
+        self.loaded = True
+
+    def generate(self, prompt: str, **kwargs) -> str:
+        if not self.loaded:
+            self.load()
+
+        output = self.model.generate(
+            self.prepare_prompt(prompt, **kwargs),
+            self.sampling_params,
+            use_tqdm=False,
+            **kwargs,
+        )
+        return output[0].outputs[0].text
+
+    def prepare_prompt(self, user_prompt, system_prompt="", **kwargs):
+        messages = [
+            {
+                "role": "system",
+                "content": system_prompt,
+            },
+            {"role": "user", "content": user_prompt},
+        ]
+
+        prompt = self.pipeline.tokenizer.apply_chat_template(
+            messages, tokenize=False, add_generation_prompt=True
+        )
+
+        return prompt
+
+
 class GPT4(BaseModel, arbitrary_types_allowed=True):
     temperature = 0.0
     version = "4"  # 4 or chat
@@ -243,12 +315,13 @@ class GPT4(BaseModel, arbitrary_types_allowed=True):
 class Gemini(BaseModel, arbitrary_types_allowed=True):
     loaded = False
     temperature: Optional[float] = 0.0
+    model_name: Optional[str]
     model: Optional[genai.GenerativeModel]
     config: Optional[genai.GenerationConfig]
 
     def load(self):
         genai.configure(api_key=os.environ["GEMINIAPI"])
-        self.model = genai.GenerativeModel("gemini-pro")
+        self.model = genai.GenerativeModel(self.model_name)
         if self.temperature:
             self.config = genai.GenerationConfig(temperature=self.temperature)
         else:
@@ -282,6 +355,9 @@ def select_model(model_name, **kwargs):
     elif model_name == "llama2":
         path = "TheBloke/Llama-2-70B-chat-AWQ"  # "meta-llama/Llama-2-70b-chat-hf",
         model = VLLM(model_path=path, **kwargs)
+    elif model_name == "llama3":
+        path = "casperhansen/llama-3-70b-instruct-awq"
+        model = VLLMLlama3(model_path=path, **kwargs)
     elif model_name == "codellama":
         path = "TheBloke/CodeLlama-70B-Instruct-AWQ"
         model = VLLM(model_path=path, **kwargs)
@@ -297,8 +373,10 @@ def select_model(model_name, **kwargs):
         # model = CausalModel(model_path=path, **kwargs)
         path = "TheBloke/MetaMath-70B-V1.0-AWQ"
         model = VLLM(model_path=path, temperature=0.7, top_p=0.95, top_k=40, **kwargs)
-    elif model_name == "gemini":
-        model = Gemini(**kwargs)
+    elif model_name == "gemini-pro":
+        model = Gemini(model_name="gemini-pro", **kwargs)
+    elif model_name == "gemini-1.5":
+        model = Gemini(model_name="gemini-1.5-flash", **kwargs)
     else:
         breakpoint()
 
